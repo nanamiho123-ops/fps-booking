@@ -1,0 +1,2037 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>國考前四人成行技能練習申請表單</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --brand: #F26B38;
+  --brand-dark: #D9501E;
+  --brand-soft: #FFF1EA;
+  --brand-line: #FFD8C2;
+  --ink: #1f2937;
+  --ink-soft: #6b7280;
+  --ink-mute: #9ca3af;
+  --line: #e5e7eb;
+  --line-soft: #f1f5f9;
+  --bg: #fafafa;
+  --paper: #ffffff;
+  --success: #10b981;
+  --success-soft: #ecfdf5;
+  --warn: #f59e0b;
+  --danger: #ef4444;
+  --shadow-sm: 0 1px 2px rgba(15,23,42,.05);
+  --shadow: 0 4px 14px rgba(15,23,42,.06);
+  --shadow-lg: 0 12px 32px rgba(242,107,56,.18);
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+html, body {
+  margin: 0; padding: 0; background: var(--bg);
+  font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--ink); line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+input, select, button, textarea { font-family: inherit; }
+button { cursor: pointer; }
+a { color: inherit; }
+
+/* ── App shell ─────────────────────────────────── */
+.app {
+  max-width: 560px; margin: 0 auto; min-height: 100vh;
+  background: var(--paper); box-shadow: 0 0 40px rgba(0,0,0,.04);
+  padding-bottom: 6rem;
+}
+@media (min-width: 768px) {
+  .app { max-width: 720px; }
+}
+@media (min-width: 1024px) {
+  .app { max-width: 960px; }
+}
+
+/* ── Hero / Header ────────────────────────────────*/
+.hero {
+  position: relative;
+  background: linear-gradient(135deg, #F26B38 0%, #F59E0B 100%);
+  color: white; padding: 1.5rem 1.25rem 5rem;
+}
+@media (min-width: 768px) {
+  .hero { padding: 2rem 1.75rem 5.5rem; }
+}
+@media (min-width: 1024px) {
+  .hero { padding: 2.75rem 2.25rem 6rem; }
+}
+.hero h1 { font-size: 1.5rem; font-weight: 900; margin: 0; letter-spacing: .02em; }
+@media (min-width: 768px) { .hero h1 { font-size: 1.875rem; } }
+@media (min-width: 1024px) { .hero h1 { font-size: 2.25rem; } }
+.hero p { font-size: .875rem; opacity: .95; margin: .25rem 0 0; }
+@media (min-width: 768px) { .hero p { font-size: 1rem; margin-top: .5rem; } }
+.hero .badge-row {
+  display: flex; gap: .5rem; margin-top: .875rem; flex-wrap: wrap;
+}
+.hero .b {
+  background: rgba(255,255,255,.22); backdrop-filter: blur(6px);
+  padding: .25rem .625rem; border-radius: 999px;
+  font-size: .75rem; font-weight: 500;
+}
+
+/* ── Steps ──────────────────────────────────────── */
+.steps {
+  margin: -3.25rem 1rem 0; background: white; border-radius: 14px;
+  padding: .875rem 1rem; box-shadow: var(--shadow);
+  display: flex; align-items: center; justify-content: space-between;
+  position: relative; z-index: 2;
+}
+.step {
+  display: flex; align-items: center; gap: .5rem; flex: 0 0 auto;
+  font-size: .8125rem; color: var(--ink-mute); font-weight: 500;
+}
+.step .n {
+  width: 1.5rem; height: 1.5rem; border-radius: 50%;
+  background: var(--line-soft); color: var(--ink-mute);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .75rem; font-weight: 700;
+}
+.step.done .n { background: var(--success); color: white; }
+.step.active { color: var(--brand); font-weight: 700; }
+.step.active .n { background: var(--brand); color: white; box-shadow: 0 0 0 4px var(--brand-soft); }
+.step .bar {
+  width: 1.5rem; height: 2px; background: var(--line-soft); border-radius: 2px;
+}
+.step.done .bar { background: var(--success); }
+
+/* ── Content sections ───────────────────────────── */
+.sec { padding: 1.25rem 1rem 0; }
+@media (min-width: 768px) { .sec { padding: 1.5rem 1.5rem 0; } }
+@media (min-width: 1024px) { .sec { padding: 1.75rem 2rem 0; } }
+.sec h2 {
+  font-size: 1rem; font-weight: 700; margin: 0 0 .75rem;
+  display: flex; align-items: center; gap: .5rem; color: var(--ink);
+}
+.sec h2 .num {
+  width: 1.5rem; height: 1.5rem; border-radius: 50%;
+  background: var(--brand-soft); color: var(--brand);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: .8125rem; font-weight: 700;
+}
+.sec h2 .ico-pill {
+  width: 1.5rem; height: 1.5rem; border-radius: 50%;
+  background: var(--line-soft); color: var(--ink-soft);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: .8125rem;
+}
+
+/* ── Skill practice models grid ─────────────────── */
+.models {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: .625rem;
+}
+@media (min-width: 640px) {
+  .models { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 1024px) {
+  .models { grid-template-columns: repeat(4, 1fr); gap: .75rem; }
+}
+.model {
+  background: white; border: 1.5px solid var(--line); border-radius: 12px;
+  padding: .75rem .875rem; cursor: pointer; transition: all .15s;
+  display: flex; align-items: center; gap: .625rem;
+  font-size: .9375rem; color: var(--ink);
+}
+.model:hover { border-color: var(--brand-line); background: var(--brand-soft); }
+.model.checked {
+  background: var(--brand-soft); border-color: var(--brand);
+  color: var(--brand); font-weight: 700;
+}
+.model.locked {
+  opacity: .4; cursor: not-allowed;
+}
+.model.locked:hover { background: white; border-color: var(--line); color: var(--ink); }
+.model.blocked {
+  opacity: 1;
+  background: #fee2e2; border-color: #fca5a5; color: #991b1b;
+  cursor: not-allowed;
+}
+.model.blocked:hover { background: #fee2e2; border-color: #fca5a5; color: #991b1b; }
+.model.blocked .m-ico { background: #fecaca; color: #991b1b; }
+.model .m-ico {
+  width: 2rem; height: 2rem; flex-shrink: 0;
+  border-radius: 8px; background: var(--line-soft);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.125rem;
+}
+.model.checked .m-ico { background: var(--brand); color: white; }
+.model .m-name { flex: 1; line-height: 1.3; }
+.model .m-tick {
+  width: 1.25rem; height: 1.25rem; flex-shrink: 0;
+  border-radius: 50%; border: 2px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .75rem; color: transparent;
+}
+.model.checked .m-tick {
+  background: var(--brand); border-color: var(--brand); color: white;
+}
+@media (max-width: 380px) {
+  .models { grid-template-columns: 1fr; }
+}
+.sec .hint {
+  font-size: .8125rem; color: var(--ink-soft); margin: -.25rem 0 .75rem;
+}
+.notice {
+  background: #fef3c7; border: 1.5px solid #fbbf24;
+  color: #78350f; border-radius: 10px;
+  padding: .625rem .875rem; font-size: .8125rem; line-height: 1.5;
+  margin-bottom: .75rem;
+}
+.notice strong { color: #92400e; }
+
+.info-banner {
+  background: #eff6ff; border-left: 4px solid #3b82f6;
+  border-radius: 6px;
+  padding: .625rem .875rem;
+  margin-bottom: .75rem;
+  font-size: .8125rem; line-height: 1.55;
+  color: #1e40af;
+}
+.info-banner strong { color: #1e3a8a; }
+
+/* ── 已填寫 X/4 人 進度 ──────────────── */
+.party-progress {
+  background: white;
+  border: 1.5px solid var(--brand-line);
+  border-radius: 12px;
+  padding: .75rem 1rem;
+  margin-bottom: .75rem;
+}
+.pp-head {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: .625rem;
+  margin-bottom: .5rem;
+}
+.pp-label {
+  font-size: .9375rem; color: var(--ink);
+  font-weight: 600;
+}
+.pp-label strong {
+  color: var(--brand);
+  font-size: 1.125rem;
+  margin: 0 .125rem;
+}
+.pp-chips { display: flex; gap: .375rem; }
+.pp-chip {
+  width: 1.75rem; height: 1.75rem;
+  border-radius: 50%;
+  background: white;
+  border: 1.5px solid var(--line);
+  color: var(--ink-mute);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: .8125rem; font-weight: 700;
+  transition: all .2s;
+}
+.pp-chip.done {
+  background: var(--success);
+  border-color: var(--success);
+  color: white;
+}
+.pp-chip.done::before { content: '✓'; }
+.pp-chip.done { font-size: .75rem; }
+.pp-bar {
+  height: 6px;
+  background: var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.pp-bar > i {
+  display: block; height: 100%;
+  width: 0%;
+  background: var(--success);
+  transition: width .35s ease;
+}
+.party-progress.p4 {
+  background: var(--success-soft);
+  border-color: var(--success);
+}
+.party-progress.p4 .pp-label strong { color: var(--success); }
+
+/* ── 進行方式 資訊卡 ────────────────── */
+.intro-card {
+  background: white; border: 1.5px solid var(--brand-line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.intro-head {
+  display: flex; align-items: center; gap: .625rem;
+  padding: .75rem 1rem;
+  font-weight: 700; color: var(--brand);
+  background: var(--brand-soft);
+  border-bottom: 1px solid var(--brand-line);
+}
+.intro-ico { font-size: 1.25rem; flex-shrink: 0; }
+.intro-title { font-size: .9375rem; }
+.intro-body {
+  padding: .875rem 1rem 1rem;
+  font-size: .875rem; line-height: 1.7;
+  color: var(--ink);
+}
+.intro-body p { margin: 0 0 .625rem; }
+.intro-body ul { margin: 0; padding-left: 1.25rem; }
+.intro-body li { margin-bottom: .25rem; }
+.intro-body strong { color: var(--brand); }
+
+
+
+/* ── Identity form ──────────────────────────────── */
+.form {
+  background: var(--paper); border: 1px solid var(--line); border-radius: 12px;
+  padding: 1rem;
+}
+.field { margin-bottom: .875rem; }
+.field:last-child { margin-bottom: 0; }
+@media (min-width: 768px) {
+  .form { padding: 1.25rem 1.5rem; }
+  .form > .field,
+  .acc-body > .field {
+    display: grid;
+    grid-template-columns: 9rem 1fr;
+    align-items: center; gap: 1rem;
+    margin-bottom: .625rem;
+  }
+  .form > .field label,
+  .acc-body > .field label {
+    margin-bottom: 0;
+  }
+}
+.field label {
+  display: block; font-size: .8125rem; color: var(--ink-soft);
+  font-weight: 500; margin-bottom: .375rem;
+}
+.field input, .field select {
+  width: 100%; padding: .75rem .875rem; border: 1.5px solid var(--line);
+  border-radius: 10px; font-size: .9375rem; background: white;
+  transition: border-color .15s, box-shadow .15s;
+}
+.field input:focus, .field select:focus {
+  outline: none; border-color: var(--brand);
+  box-shadow: 0 0 0 3px var(--brand-soft);
+}
+.field input::placeholder { color: var(--ink-mute); }
+.req { color: var(--brand); font-size: .75rem; margin-left: .25rem; }
+
+.group-section {
+  margin-top: 1rem; padding-top: 1rem;
+  border-top: 1px dashed var(--line);
+}
+.group-title {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: .5rem; margin-bottom: .75rem; flex-wrap: wrap;
+}
+.group-title > span:first-child {
+  font-size: .9375rem; font-weight: 700; color: var(--ink);
+}
+.group-sub { font-size: .75rem; color: var(--ink-soft); }
+
+/* ── Member accordion ──────────────────── */
+.acc {
+  border: 1.5px solid var(--line); border-radius: 10px;
+  margin-bottom: .625rem; background: white; overflow: hidden;
+}
+.acc.filled { border-color: var(--brand-line); }
+.acc-tog {
+  width: 100%; background: transparent; border: none;
+  padding: .75rem .875rem; cursor: pointer;
+  display: flex; align-items: center; gap: .625rem;
+  font-size: .9375rem; font-weight: 600; color: var(--ink);
+  text-align: left; line-height: 1.3;
+}
+.acc-tog:hover { background: var(--brand-soft); }
+.acc-ico {
+  width: 1.5rem; height: 1.5rem; border-radius: 50%;
+  background: white; color: var(--brand);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 1.125rem; font-weight: 700; line-height: 1;
+  border: 1.5px solid var(--brand);
+  flex-shrink: 0; transition: transform .2s, background .15s, color .15s;
+}
+.acc.open .acc-ico {
+  background: var(--brand); color: white;
+  transform: rotate(45deg);
+}
+.acc-lbl { flex-shrink: 0; }
+.acc-prev {
+  flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: var(--brand); font-weight: 700; font-size: .8125rem;
+}
+.acc-body {
+  display: none; padding: .75rem .875rem 1rem;
+  border-top: 1.5px dashed var(--line);
+  background: var(--line-soft);
+}
+.acc.open .acc-body { display: block; }
+.acc-body .field { margin-bottom: .625rem; }
+.acc-body .field:last-child { margin-bottom: 0; }
+.acc-body .field input {
+  background: white;
+}
+
+/* ── Consent checkbox ──────────────────── */
+.consent {
+  margin-top: 1rem;
+  padding: .75rem .875rem;
+  background: #fef3c7;
+  border: 1.5px solid #fbbf24;
+  border-radius: 10px;
+}
+.consent-lbl {
+  display: flex; align-items: flex-start; gap: .625rem;
+  cursor: pointer; line-height: 1.5;
+  font-size: .875rem; color: #78350f;
+  user-select: none;
+}
+.consent-lbl input[type="checkbox"] {
+  width: 1.125rem; height: 1.125rem;
+  flex-shrink: 0; margin: .125rem 0 0;
+  accent-color: var(--brand);
+  cursor: pointer;
+}
+.consent.checked {
+  background: var(--success-soft);
+  border-color: var(--success);
+}
+.consent.checked .consent-lbl { color: #065f46; }
+
+
+/* ── Calendar grid ──────────────────────────────── */
+.cal {
+  background: white; border: 1px solid var(--line); border-radius: 12px;
+  padding: 1rem;
+}
+.cal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: .75rem; margin-bottom: .875rem;
+}
+.cal-arrow {
+  background: var(--brand-soft); border: 1.5px solid var(--brand-line);
+  color: var(--brand);
+  width: 2.25rem; height: 2.25rem; border-radius: 50%;
+  font-size: 1.375rem; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all .15s; font-weight: 700;
+}
+.cal-arrow:hover:not(:disabled) {
+  background: var(--brand); color: white; border-color: var(--brand);
+  transform: scale(1.05);
+}
+.cal-arrow:disabled {
+  background: var(--line-soft); border-color: var(--line);
+  color: var(--ink-mute); cursor: not-allowed;
+}
+
+.cal-months {
+  display: block; min-width: 0;
+}
+.cal-month { min-width: 0; }
+.cal-title {
+  flex: 1; text-align: center;
+  font-size: 1.0625rem; font-weight: 800; color: var(--ink);
+  margin: 0; letter-spacing: .02em;
+}
+.cal-dow {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  font-size: .75rem; color: var(--ink-soft); text-align: center;
+  margin-bottom: .25rem;
+}
+.cal-dow > div { padding: .125rem 0; font-weight: 500; }
+.cal-grid {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
+}
+.cal-cell {
+  aspect-ratio: 1; min-height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .875rem; color: var(--ink); background: white;
+  border: 1.5px solid var(--line); border-radius: 6px;
+  cursor: pointer; transition: all .15s;
+  position: relative; line-height: 1; font-weight: 500;
+}
+@media (min-width: 768px) {
+  .cal-cell { min-height: 44px; font-size: .9375rem; }
+}
+@media (min-width: 1024px) {
+  .cal-cell { min-height: 56px; font-size: 1rem; border-radius: 8px; }
+  .cal-grid { gap: 6px; }
+  .cal-dow > div { padding: .375rem 0; font-size: .8125rem; }
+}
+.cal-cell:hover { border-color: var(--brand-line); background: var(--brand-soft); color: var(--brand); }
+.cal-cell.selected {
+  background: var(--brand); border-color: var(--brand); color: white;
+  font-weight: 700; box-shadow: var(--shadow-lg);
+}
+.cal-cell.today::before {
+  content: ''; position: absolute; top: 3px; right: 3px;
+  width: 5px; height: 5px; border-radius: 50%; background: var(--brand);
+}
+.cal-cell.selected.today::before { background: white; }
+.cal-cell.empty,
+.cal-cell.past,
+.cal-cell.no-slot {
+  background: transparent; border-color: transparent;
+  color: var(--ink-mute); cursor: default; pointer-events: none;
+  font-weight: 400;
+}
+.cal-cell.empty { color: transparent; }
+@media (max-width: 380px) {
+  .cal { padding: .75rem .25rem; }
+  .cal-cell { font-size: .8125rem; min-height: 32px; }
+}
+
+/* ── Time slot grid ─────────────────────────────── */
+.slots {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: .625rem;
+}
+@media (min-width: 640px) {
+  .slots { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 1024px) {
+  .slots { grid-template-columns: repeat(4, 1fr); gap: .75rem; }
+}
+.slot {
+  background: white; border: 1.5px solid var(--line); border-radius: 12px;
+  padding: .875rem; transition: all .15s;
+  display: flex; flex-direction: column; gap: .5rem;
+  cursor: pointer; position: relative;
+}
+.slot:hover:not(.disabled):not(.selected) {
+  border-color: var(--brand-line); background: var(--brand-soft);
+}
+.slot.selected {
+  border-color: var(--brand); background: var(--brand-soft);
+  box-shadow: 0 0 0 3px var(--brand-soft);
+}
+.slot.full {
+  background: var(--success-soft); border-color: var(--success);
+}
+.slot.joined {
+  background: var(--brand-soft); border-color: var(--brand);
+}
+.slot.disabled { opacity: .5; cursor: not-allowed; background: var(--line-soft); }
+
+.slot .t {
+  font-size: 1rem; font-weight: 800; color: var(--ink);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.slot .p {
+  font-size: .75rem; color: var(--ink-soft);
+  display: flex; align-items: center; gap: .25rem;
+}
+.slot .meter {
+  display: flex; align-items: center; gap: .5rem; margin-top: auto;
+}
+.slot .meter .bar {
+  flex: 1; height: 4px; background: var(--line); border-radius: 999px; overflow: hidden;
+}
+.slot .meter .bar > i {
+  display: block; height: 100%; background: var(--brand);
+  transition: width .35s ease;
+}
+.slot.full .meter .bar > i { background: var(--success); }
+.slot .meter .n {
+  font-size: .75rem; font-weight: 700; color: var(--ink-soft);
+  white-space: nowrap;
+}
+.slot.full .meter .n { color: var(--success); }
+
+.tag {
+  display: inline-flex; align-items: center;
+  font-size: .6875rem; font-weight: 700;
+  padding: .125rem .5rem; border-radius: 999px;
+  background: var(--brand-soft); color: var(--brand);
+}
+.tag.full { background: var(--success); color: white; }
+.tag.wait { background: #fef3c7; color: #92400e; }
+.tag.avail { background: var(--brand-soft); color: var(--brand); }
+
+.picked-pill {
+  display: inline-block;
+  background: var(--brand); color: white;
+  font-size: .6875rem; font-weight: 700;
+  padding: .15rem .5rem; border-radius: 999px;
+  margin: 0 .125rem;
+  white-space: nowrap;
+}
+
+/* ── 已勾選摘要 ─────────────────────── */
+.sum-row { margin-bottom: .75rem; }
+.sum-row:last-child { margin-bottom: 0; }
+.sum-lbl {
+  font-size: .8125rem; font-weight: 700; color: var(--ink-soft);
+  margin-bottom: .375rem;
+}
+.sum-chips { display: flex; flex-wrap: wrap; gap: .375rem; }
+.sum-chip {
+  background: var(--brand-soft); color: var(--brand);
+  border: 1px solid var(--brand-line);
+  font-size: .8125rem; font-weight: 600;
+  padding: .25rem .625rem; border-radius: 999px;
+  white-space: nowrap;
+}
+.tag.joined { background: var(--brand); color: white; }
+.tag.past { background: var(--line-soft); color: var(--ink-mute); }
+
+/* ── Mine list ──────────────────────────────────── */
+.mine {
+  display: flex; flex-direction: column; gap: .625rem;
+}
+.mine-item {
+  background: white; border: 1px solid var(--line); border-radius: 12px;
+  padding: .875rem 1rem; display: flex; align-items: center; gap: .75rem;
+}
+.mine-item .mi-icon {
+  width: 2.5rem; height: 2.5rem; border-radius: 10px;
+  background: var(--brand-soft); color: var(--brand);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.25rem; flex-shrink: 0;
+}
+.mine-item.done .mi-icon { background: var(--success-soft); color: var(--success); }
+.mine-item .mi-body { flex: 1; min-width: 0; }
+.mine-item .mi-date { font-size: .9375rem; font-weight: 700; color: var(--ink); }
+.mine-item .mi-meta { font-size: .75rem; color: var(--ink-soft); margin-top: .125rem; }
+.mine-item .mi-x {
+  background: none; border: 1.5px solid var(--line);
+  color: var(--ink-soft); border-radius: 8px;
+  padding: .375rem .625rem; font-size: .75rem;
+  flex-shrink: 0;
+}
+.mine-item .mi-x:hover { border-color: var(--danger); color: var(--danger); }
+.mine-item .mi-x.danger {
+  background: #fef2f2;
+  border-color: var(--danger);
+  color: var(--danger);
+  font-weight: 700;
+  padding: .5rem .875rem;
+  font-size: .8125rem;
+  white-space: nowrap;
+}
+.mine-item .mi-x.danger:hover {
+  background: var(--danger);
+  color: white;
+  border-color: var(--danger);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239,68,68,.3);
+}
+
+/* ── Empty / placeholders ───────────────────────── */
+.empty {
+  text-align: center; padding: 2rem 1rem;
+  color: var(--ink-mute); font-size: .875rem;
+}
+.empty .ico { font-size: 2rem; margin-bottom: .5rem; opacity: .5; }
+
+/* ── Sticky bottom CTA ──────────────────────────── */
+.cta-bar {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: white; border-top: 1px solid var(--line);
+  padding: .75rem 1rem calc(.75rem + env(safe-area-inset-bottom));
+  display: flex; justify-content: center;
+  z-index: 50;
+}
+.cta-inner {
+  width: 100%; max-width: 560px; display: flex; gap: .75rem; align-items: center;
+}
+@media (min-width: 768px) { .cta-inner { max-width: 720px; } }
+@media (min-width: 1024px) { .cta-inner { max-width: 960px; } }
+.cta-info {
+  flex: 1; font-size: .75rem; color: var(--ink-soft);
+}
+.cta-info b { color: var(--brand); font-size: .9375rem; }
+.cta {
+  flex: 0 0 auto; padding: .875rem 1.5rem;
+  background: var(--brand); color: white; border: none;
+  border-radius: 10px; font-size: 1rem; font-weight: 700;
+  box-shadow: var(--shadow-lg); transition: all .15s;
+}
+.cta:hover:not(:disabled) { background: var(--brand-dark); transform: translateY(-1px); }
+.cta:disabled { background: var(--line); color: var(--ink-mute); box-shadow: none; cursor: not-allowed; }
+
+/* ── Modal ──────────────────────────────────────── */
+.modal-bg {
+  display: none; position: fixed; inset: 0; z-index: 200;
+  background: rgba(15,23,42,.5);
+  align-items: flex-end; justify-content: center; padding: 0;
+}
+@media (min-width: 640px) {
+  .modal-bg { align-items: center; padding: 1rem; }
+}
+.modal-bg.open { display: flex; }
+.modal {
+  background: white; border-radius: 18px 18px 0 0; padding: 1.25rem;
+  width: 100%; max-width: 460px;
+  animation: sl .25s ease;
+}
+@media (min-width: 640px) {
+  .modal { border-radius: 18px; }
+}
+@keyframes sl {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.modal h3 { margin: 0 0 .375rem; font-size: 1.125rem; color: var(--ink); }
+.modal .sub { font-size: .875rem; color: var(--ink-soft); margin-bottom: 1rem; }
+.modal .summary {
+  background: var(--brand-soft); border-radius: 10px; padding: .875rem 1rem;
+  margin-bottom: 1rem;
+}
+.modal .summary .row {
+  display: flex; justify-content: space-between; padding: .25rem 0;
+  font-size: .875rem;
+}
+.modal .summary .row .l { color: var(--ink-soft); }
+.modal .summary .row .v { color: var(--ink); font-weight: 700; }
+.modal .roster-list {
+  background: var(--line-soft); border-radius: 10px; padding: .75rem .875rem;
+  margin-bottom: 1rem;
+}
+.modal .roster-list .item {
+  font-size: .8125rem; color: var(--ink); padding: .125rem 0;
+}
+.modal .roster-list .item.me { color: var(--brand); font-weight: 700; }
+.mbtns { display: flex; gap: .5rem; }
+.mbtn {
+  flex: 1; padding: .75rem; border-radius: 10px; font-size: .9375rem;
+  font-weight: 700; border: 1.5px solid transparent;
+}
+.mbtn-cancel { background: white; color: var(--ink); border-color: var(--line); }
+.mbtn-cancel:hover { background: var(--line-soft); }
+.mbtn-ok { background: var(--brand); color: white; }
+.mbtn-ok:hover { background: var(--brand-dark); }
+
+/* ── Toast ──────────────────────────────────────── */
+.toast {
+  position: fixed; bottom: 6rem; left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink); color: white;
+  padding: .75rem 1.125rem; border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.25); z-index: 300;
+  max-width: 90%; font-size: .875rem;
+  animation: toa .25s ease;
+}
+.toast.success { background: var(--success); }
+.toast.warn { background: var(--warn); }
+.toast.danger { background: var(--danger); }
+.toast .t-t { font-weight: 700; }
+.toast .t-b { font-size: .75rem; opacity: .9; margin-top: .125rem; }
+@keyframes toa {
+  from { transform: translateX(-50%) translateY(30px); opacity: 0; }
+  to { transform: translateX(-50%) translateY(0); opacity: 1; }
+}
+
+/* ── Footer link ────────────────────────────────── */
+.footer-link {
+  text-align: center; padding: 1.5rem 1rem .5rem;
+  font-size: .75rem; color: var(--ink-mute);
+}
+.footer-link a { color: var(--brand); text-decoration: none; font-weight: 500; }
+
+@media (max-width: 380px) {
+  .slots { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 1.25rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Hero -->
+  <div class="hero">
+    <h1>國考前四人成行技能練習申請表單</h1>
+    <div class="badge-row">
+      <span class="b">📚 模擬診間預約</span>
+      <span class="b">📧 自動通知</span>
+    </div>
+  </div>
+
+  <!-- Steps -->
+  <div class="steps">
+    <div class="step" id="step1"><div class="n">1</div><span>選日期</span></div>
+    <div class="bar"></div>
+    <div class="step" id="step2"><div class="n">2</div><span>選時段</span></div>
+    <div class="bar"></div>
+    <div class="step" id="step3"><div class="n">3</div><span>填資料</span></div>
+    <div class="bar"></div>
+    <div class="step" id="step4"><div class="n">4</div><span>送出</span></div>
+  </div>
+
+  <!-- Intro / 進行方式 -->
+  <div class="sec">
+    <div class="intro-card">
+      <div class="intro-head">
+        <span class="intro-ico">📖</span>
+        <span class="intro-title">四人成行技能練習 · 進行方式</span>
+      </div>
+      <div class="intro-body">
+        <p>全年可行，學員可申請練習。因國考前場地空間有限，請同學集中練習（技能訓練、自主學習）；若有需求，經實習單位同意後提出申請。</p>
+        <ul>
+          <li>請學員 <strong>4 人</strong>，有指導老師尤佳</li>
+          <li>由 <strong>1 位學生代表</strong>填寫申請單</li>
+          <li>另因應國考場地佈置及相關準備作業，<strong>前一週開始至國考結束將暫停開放</strong>四人成行技能練習時段。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 1: date -->
+  <div class="sec">
+    <h2><span class="num">1</span>選擇日期</h2>
+    <div class="hint">有邊框的日期可預約，灰色為無開放時段或已過期</div>
+    <div class="cal">
+      <div class="cal-header">
+        <button class="cal-arrow" id="calPrev" aria-label="上個月">‹</button>
+        <div class="cal-title" id="calTitle">—</div>
+        <button class="cal-arrow" id="calNext" aria-label="下個月">›</button>
+      </div>
+      <div class="cal-months" id="calMonths"></div>
+    </div>
+  </div>
+
+  <!-- Step 2: time slot -->
+  <div class="sec">
+    <h2><span class="num">2</span>選擇時段</h2>
+    <div class="hint" id="slotHint">可複選，最多 <strong style="color:var(--brand);">3 個</strong>（可跨日）</div>
+    <div class="notice" id="needPartyNotice" hidden>
+      ⚠️ <strong>未滿 4 人不可預約報名</strong> · 請先到下方步驟 3 填妥 4 位成員完整資料
+    </div>
+    <div class="slots" id="slots"></div>
+  </div>
+
+  <!-- Step 3: identity -->
+  <div class="sec">
+    <h2><span class="num">3</span>填寫個人資料</h2>
+    <div class="info-banner">
+      💡 <strong>4 人同進退</strong>：4 人同時送出預約；任 1 人取消即整組退出
+    </div>
+    <div class="party-progress">
+      <div class="pp-head">
+        <span class="pp-label">👥 已填寫 <strong id="ppCount">0</strong>/4 人</span>
+        <div class="pp-chips">
+          <span class="pp-chip" id="ppChip1">1</span>
+          <span class="pp-chip" id="ppChip2">2</span>
+          <span class="pp-chip" id="ppChip3">3</span>
+          <span class="pp-chip" id="ppChip4">4</span>
+        </div>
+      </div>
+      <div class="pp-bar"><i id="ppBar"></i></div>
+    </div>
+    <div class="form">
+      <div class="field">
+        <label>姓名（您本人）<span class="req">＊</span></label>
+        <input id="iName" type="text" placeholder="例：王小明" maxlength="20">
+      </div>
+      <div class="field">
+        <label>員編 <span class="req">＊</span></label>
+        <input id="iEmpno" type="text" placeholder="例：123456" maxlength="6" inputmode="numeric" pattern="\d{6}">
+      </div>
+      <div class="field">
+        <label>電話 <span class="req">＊</span></label>
+        <input id="iPhone" type="tel" placeholder="例：0912-345-678" maxlength="20">
+      </div>
+      <div class="field">
+        <label>Email <span class="req">＊</span></label>
+        <input id="iMail" type="email" placeholder="例：abc@ntu.edu.tw" maxlength="80">
+      </div>
+      <div class="field">
+        <label>實習科部 <span class="req">＊</span></label>
+        <input id="iDept" type="text" placeholder="例：耳鼻喉部" maxlength="30">
+      </div>
+      <div class="field">
+        <label>實習病房單位 <span class="req">＊</span></label>
+        <input id="iWard" type="text" placeholder="例：6C" maxlength="30">
+      </div>
+
+      <div class="group-section">
+        <div class="group-title">
+          <span>👥 同行成員</span>
+          <span class="group-sub">需填寫 3 位同行成員（共 4 人才能送出）</span>
+        </div>
+
+        <div class="acc" data-mid="2">
+          <button class="acc-tog" type="button">
+            <span class="acc-ico">+</span>
+            <span class="acc-lbl">成員 2</span>
+            <span class="acc-prev" id="iName2Preview"></span>
+          </button>
+          <div class="acc-body">
+            <div class="field"><label>姓名 <span class="req">＊</span></label><input id="iName2" type="text" placeholder="例：王小明" maxlength="20"></div>
+            <div class="field"><label>員編 <span class="req">＊</span></label><input id="iEmpno2" type="text" placeholder="例：123456" maxlength="6" inputmode="numeric" pattern="\d{6}"></div>
+            <div class="field"><label>電話 <span class="req">＊</span></label><input id="iPhone2" type="tel" placeholder="例：0912-345-678" maxlength="20"></div>
+            <div class="field"><label>Email <span class="req">＊</span></label><input id="iMail2" type="email" placeholder="例：abc@ntu.edu.tw" maxlength="80"></div>
+            <div class="field"><label>實習科部 <span class="req">＊</span></label><input id="iDept2" type="text" placeholder="例：耳鼻喉部" maxlength="30"></div>
+            <div class="field"><label>實習病房單位 <span class="req">＊</span></label><input id="iWard2" type="text" placeholder="例：6C" maxlength="30"></div>
+          </div>
+        </div>
+
+        <div class="acc" data-mid="3">
+          <button class="acc-tog" type="button">
+            <span class="acc-ico">+</span>
+            <span class="acc-lbl">成員 3</span>
+            <span class="acc-prev" id="iName3Preview"></span>
+          </button>
+          <div class="acc-body">
+            <div class="field"><label>姓名 <span class="req">＊</span></label><input id="iName3" type="text" placeholder="例：李小華" maxlength="20"></div>
+            <div class="field"><label>員編 <span class="req">＊</span></label><input id="iEmpno3" type="text" placeholder="例：123456" maxlength="6" inputmode="numeric" pattern="\d{6}"></div>
+            <div class="field"><label>電話 <span class="req">＊</span></label><input id="iPhone3" type="tel" placeholder="例：0912-345-678" maxlength="20"></div>
+            <div class="field"><label>Email <span class="req">＊</span></label><input id="iMail3" type="email" placeholder="例：abc@ntu.edu.tw" maxlength="80"></div>
+            <div class="field"><label>實習科部 <span class="req">＊</span></label><input id="iDept3" type="text" placeholder="例：耳鼻喉部" maxlength="30"></div>
+            <div class="field"><label>實習病房單位 <span class="req">＊</span></label><input id="iWard3" type="text" placeholder="例：6C" maxlength="30"></div>
+          </div>
+        </div>
+
+        <div class="acc" data-mid="4">
+          <button class="acc-tog" type="button">
+            <span class="acc-ico">+</span>
+            <span class="acc-lbl">成員 4</span>
+            <span class="acc-prev" id="iName4Preview"></span>
+          </button>
+          <div class="acc-body">
+            <div class="field"><label>姓名 <span class="req">＊</span></label><input id="iName4" type="text" placeholder="例：陳大同" maxlength="20"></div>
+            <div class="field"><label>員編 <span class="req">＊</span></label><input id="iEmpno4" type="text" placeholder="例：123456" maxlength="6" inputmode="numeric" pattern="\d{6}"></div>
+            <div class="field"><label>電話 <span class="req">＊</span></label><input id="iPhone4" type="tel" placeholder="例：0912-345-678" maxlength="20"></div>
+            <div class="field"><label>Email <span class="req">＊</span></label><input id="iMail4" type="email" placeholder="例：abc@ntu.edu.tw" maxlength="80"></div>
+            <div class="field"><label>實習科部 <span class="req">＊</span></label><input id="iDept4" type="text" placeholder="例：耳鼻喉部" maxlength="30"></div>
+            <div class="field"><label>實習病房單位 <span class="req">＊</span></label><input id="iWard4" type="text" placeholder="例：6C" maxlength="30"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Step 4: skill practice models -->
+  <div class="sec">
+    <h2><span class="num">4</span>技能練習模具 <span class="req">＊</span></h2>
+    <div class="hint">至少選 1 項，最多 <strong style="color:var(--brand);">2 項</strong></div>
+    <div class="models" id="models"></div>
+  </div>
+
+  <!-- Selected summary -->
+  <div class="sec" id="summarySec" hidden>
+    <h2><span class="ico-pill">✅</span>已勾選資訊</h2>
+    <div id="summaryBody"></div>
+  </div>
+
+  <!-- Consent (last block before submission) -->
+  <div class="sec">
+    <div class="consent">
+      <label class="consent-lbl">
+        <input type="checkbox" id="iConsent">
+        <span>此次技能練習均已經過實習科部同意，並確認以上資料皆正確 <span class="req">＊</span></span>
+      </label>
+    </div>
+  </div>
+
+  <!-- My reservations (cancel-only) -->
+  <div class="sec" id="mineSec" hidden>
+    <h2><span class="ico-pill">📋</span>我的預約紀錄</h2>
+    <div class="hint">點「取消」可整組退出該時段預約</div>
+    <div class="mine" id="mine"></div>
+  </div>
+
+  <div class="footer-link">
+    管理員入口 · <a href="admin.html">admin</a>
+  </div>
+
+</div>
+
+<!-- Sticky CTA -->
+<div class="cta-bar">
+  <div class="cta-inner">
+    <div class="cta-info" id="ctaInfo">尚未選擇時段</div>
+    <button class="cta" id="ctaBtn" disabled>送出報名</button>
+  </div>
+</div>
+
+<!-- Confirm modal -->
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <h3 id="mTitle">確認報名</h3>
+    <div class="sub" id="mSub">送出後將加入此時段的報名名單</div>
+    <div class="summary" id="mSummary"></div>
+    <div class="roster-list" id="mRoster"></div>
+    <div class="mbtns">
+      <button class="mbtn mbtn-cancel" onclick="closeModal()">取消</button>
+      <button class="mbtn mbtn-ok" id="mOk">確認送出</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ────────── storage keys ──────────
+const KEY_SLOTS = 'fps_slots';
+const KEY_USER  = 'fps_user';
+
+// ────────── 後端 API（Google Apps Script）──────────
+// ↓↓↓ 部署 Apps Script 後，把 /exec 網址貼在這裡（前台、後台要用同一個）↓↓↓
+const API_URL = 'https://script.google.com/macros/s/AKfycbxkCt62M6suGqcJhgdAE-CS4GsQU1qsbQdbsotCcFcu8CHO926owZH4ETnDvSZ7BGYz/exec';
+
+let _slots = [];              // 時段快取（來源＝後端）
+let _recip = [];              // 通知名單快取
+const LS_CACHE = 'fps_cache_v2';
+
+function apiConfigured() { return /^https:\/\/script\.google\.com\//.test(API_URL); }
+async function apiGetData() {
+  const res = await fetch(API_URL + '?action=getData');
+  return res.json();
+}
+async function apiPost(payload) {
+  const res = await fetch(API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // text/plain 可避開 CORS 預檢
+    body: JSON.stringify(payload)
+  });
+  return res.json();
+}
+function applyData(d) {
+  if (d && d.ok && Array.isArray(d.slots)) {
+    _slots = d.slots;
+    if (Array.isArray(d.recipients)) _recip = d.recipients;
+    try { localStorage.setItem(LS_CACHE, JSON.stringify({ ts: Date.now(), slots: _slots })); } catch {}
+    return true;
+  }
+  return false;
+}
+function loadCacheFallback() {
+  try {
+    const c = JSON.parse(localStorage.getItem(LS_CACHE) || 'null');
+    if (c && Array.isArray(c.slots)) { _slots = c.slots; return true; }
+  } catch {}
+  return false;
+}
+async function loadData() {
+  if (!apiConfigured()) { showBanner('尚未設定後端 API_URL（離線展示模式，資料不會共用）'); loadCacheFallback(); renderAll(); return; }
+  try {
+    const d = await apiGetData();
+    if (!applyData(d)) throw new Error((d && d.error) || '資料格式錯誤');
+    hideBanner();
+  } catch (err) {
+    showBanner('無法連線後端，顯示上次快取資料（' + err.message + '）');
+    loadCacheFallback();
+  }
+  renderAll();
+}
+function showBanner(msg) {
+  let b = document.getElementById('apiBanner');
+  if (!b) {
+    b = document.createElement('div');
+    b.id = 'apiBanner';
+    b.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:999;background:#f59e0b;color:#78350f;font-weight:600;text-align:center;padding:10px;font-size:.8125rem;';
+    document.body.appendChild(b);
+  }
+  b.textContent = '⚠️ ' + msg;
+}
+function hideBanner() { const b = document.getElementById('apiBanner'); if (b) b.remove(); }
+
+// ────────── default seed data ──────────
+const CLOSED_DATES = new Set([
+  '2026-06-06','2026-06-07',
+  '2026-06-13','2026-06-14',
+  // 6/16 ~ 6/25 全段不開放
+  '2026-06-16','2026-06-17','2026-06-18','2026-06-19','2026-06-20',
+  '2026-06-21','2026-06-22','2026-06-23','2026-06-24','2026-06-25',
+  '2026-06-27','2026-06-28'
+]);
+function defaultSlots() {
+  const out = [];
+  const blocks = [
+    { s: '08:30', e: '09:30' },
+    { s: '09:30', e: '10:30' },
+    { s: '10:30', e: '11:30' },
+    { s: '13:30', e: '14:30' },
+    { s: '14:30', e: '15:30' },
+    { s: '15:30', e: '16:30' }
+  ];
+  // 6/1 ~ 6/30 (2026)，略過休/不開放日期
+  let id = 1;
+  for (let d = 1; d <= 30; d++) {
+    const iso = `2026-06-${String(d).padStart(2,'0')}`;
+    if (CLOSED_DATES.has(iso)) continue;
+    blocks.forEach(blk => {
+      out.push({
+        id: 'S' + String(id++).padStart(3,'0'),
+        date: iso,
+        start: blk.s, end: blk.e,
+        place: '模擬診間',
+        capacity: 8,
+        members: []
+      });
+    });
+  }
+  return out;
+}
+
+// 時段資料一律來自後端快取 _slots（由 loadData / applyData 維護）
+function getSlots() { return _slots; }
+// 本機快取設定；真正的寫入請透過 API（apiPost book / cancelGroup）
+function saveSlots(s) { _slots = s; }
+function getUser() {
+  try { return JSON.parse(localStorage.getItem(KEY_USER) || '{}'); } catch { return {}; }
+}
+function saveUser(u) { localStorage.setItem(KEY_USER, JSON.stringify(u)); }
+
+// ────────── helpers ──────────
+const $ = id => document.getElementById(id);
+const DOW = ['日','一','二','三','四','五','六'];
+function fmtDate(iso) {
+  const d = new Date(iso + 'T00:00:00');
+  return `${d.getMonth()+1}/${d.getDate()}（${DOW[d.getDay()]}）`;
+}
+function isPast(iso, end) {
+  return new Date(iso + 'T' + (end || '23:59')).getTime() < Date.now();
+}
+function userKey(u) { return (u.mail || '').toLowerCase() + '|' + (u.name || ''); }
+function escapeHtml(s) {
+  return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function toast(title, body, kind) {
+  const t = document.createElement('div');
+  t.className = 'toast ' + (kind || '');
+  t.innerHTML = `<div class="t-t">${title}</div>` + (body ? `<div class="t-b">${body}</div>` : '');
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity .3s'; }, 2400);
+  setTimeout(() => t.remove(), 2800);
+}
+
+let pendingAction = null;
+function openModal(opts) {
+  $('mTitle').textContent = opts.title || '確認';
+  $('mSub').textContent = opts.sub || '';
+  $('mSummary').innerHTML = opts.summary || '';
+  $('mSummary').style.display = opts.summary ? '' : 'none';
+  $('mRoster').innerHTML = opts.roster || '';
+  $('mRoster').style.display = opts.roster ? '' : 'none';
+  $('mOk').textContent = opts.okText || '確認';
+  pendingAction = opts.onOk;
+  $('modal').classList.add('open');
+}
+function closeModal() { $('modal').classList.remove('open'); pendingAction = null; }
+$('mOk').onclick = () => { if (pendingAction) pendingAction(); closeModal(); };
+$('modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
+
+// ────────── state ──────────
+let selectedDate = null;
+let selectedSlots = new Set();
+let selectedModels = new Set();
+const MAX_SLOTS = 3;
+// calendar shows two months side-by-side starting from this month
+let calBase = (() => { const d = new Date(); d.setHours(0,0,0,0); d.setDate(1); return d; })();
+const calMin = (() => { const d = new Date(); d.setHours(0,0,0,0); d.setDate(1); return d; })();
+
+// ────────── skill practice models ──────────
+const MODELS = [
+  { id: 'iv',     ico: '💉', name: 'IV' },
+  { id: 'foley',  ico: '💧', name: 'Foley' },
+  { id: 'dress',  ico: '🩹', name: '換藥' },
+  { id: 'suture', ico: '🧵', name: '縫合' },
+  { id: 'ng',     ico: '👃', name: 'NG' },
+  { id: 'intub',  ico: '🫁', name: '氣管插管' },
+  { id: 'pap',    ico: '🌸', name: '子抹' },
+  { id: 'abg',    ico: '🩸', name: 'ABG' }
+];
+// 每個時段、每樣模具的可用組數上限
+const MODEL_INVENTORY = {
+  'IV': 2, 'Foley': 2, '換藥': 2, '縫合': 2,
+  'NG': 2, '氣管插管': 2, '子抹': 1, 'ABG': 1
+};
+// 員編預約上限：未過期時段最多 3 次（不分主要/同行，4 人各自計算）
+// LIMIT_ENABLED = false 時完全關閉此上限（含 UI 提示與送出檢查），改回 true 即恢復
+const LIMIT_ENABLED = false;
+const MAX_BOOKINGS_PER_EMPNO = 3;
+function countActiveBookingsByEmpno(empno) {
+  if (!empno) return 0;
+  return getSlots()
+    .filter(s => !isPast(s.date, s.end))
+    .reduce((sum, s) => sum + s.members.filter(m => m.empno === empno).length, 0);
+}
+// 取得目前 4 人中已填的員編清單
+function partyEmpnos() {
+  return [1,2,3,4].map(n => memberAt(n).empno).filter(Boolean);
+}
+// 剩餘配額 = 4 人中最緊的那位
+function remainingQuota() {
+  const empnos = partyEmpnos();
+  if (!empnos.length) return MAX_BOOKINGS_PER_EMPNO;
+  const minRemain = Math.min(...empnos.map(e =>
+    MAX_BOOKINGS_PER_EMPNO - countActiveBookingsByEmpno(e)
+  ));
+  return Math.max(0, minRemain);
+}
+
+// 檢查某模具（依名稱）在已選時段中是否已額滿
+function isModelBlocked(modelName) {
+  if (selectedSlots.size === 0) return false;
+  const slots = getSlots();
+  const max = MODEL_INVENTORY[modelName] || 2;
+  for (const id of selectedSlots) {
+    const s = slots.find(x => x.id === id);
+    if (!s) continue;
+    const used = s.members
+      .filter(m => m.primary && (m.models || []).includes(modelName))
+      .length;
+    if (used >= max) return true;
+  }
+  return false;
+}
+
+// ────────── identity ──────────
+const u = getUser();
+// 載入時清理舊員編：移除非數字、截到 6 碼
+const cleanEmpno = v => (v || '').toString().replace(/\D/g, '').slice(0, 6);
+if (u.name)  $('iName').value  = u.name;
+if (u.empno) $('iEmpno').value = cleanEmpno(u.empno);
+if (u.mail)  $('iMail').value  = u.mail;
+if (u.phone) $('iPhone').value = u.phone;
+if (u.dept)  $('iDept').value  = u.dept;
+if (u.ward)  $('iWard').value  = u.ward;
+// sub-members 2/3/4 — restore all 6 fields each
+['2','3','4'].forEach(n => {
+  ['Name','Empno','Mail','Phone','Dept','Ward'].forEach(k => {
+    const key = k.toLowerCase() + (n === '1' ? '' : n);
+    if (u[key]) {
+      const val = (k === 'Empno') ? cleanEmpno(u[key]) : u[key];
+      $('i' + k + n).value = val;
+    }
+  });
+});
+if (Array.isArray(u.models)) {
+  // 只保留目前 MODELS 還存在的 id，過濾掉舊清單留下的孤兒 id
+  const validIds = new Set(MODELS.map(m => m.id));
+  selectedModels = new Set(u.models.filter(id => validIds.has(id)));
+}
+// 將清理過的員編立刻寫回 localStorage（一次性清髒）
+setTimeout(() => { try { persistUser(); } catch {} }, 0);
+
+function memberAt(n) {
+  // n = 1 (primary) | 2 | 3 | 4
+  const suf = n === 1 ? '' : String(n);
+  return {
+    name:  $('iName'  + suf).value.trim(),
+    empno: $('iEmpno' + suf).value.trim(),
+    mail:  $('iMail'  + suf).value.trim(),
+    phone: $('iPhone' + suf).value.trim(),
+    dept:  $('iDept'  + suf).value.trim(),
+    ward:  $('iWard'  + suf).value.trim()
+  };
+}
+function persistUser() {
+  const blob = { models: [...selectedModels] };
+  for (let n = 1; n <= 4; n++) {
+    const m = memberAt(n);
+    const suf = n === 1 ? '' : String(n);
+    blob['name'  + suf] = m.name;
+    blob['empno' + suf] = m.empno;
+    blob['mail'  + suf] = m.mail;
+    blob['phone' + suf] = m.phone;
+    blob['dept'  + suf] = m.dept;
+    blob['ward'  + suf] = m.ward;
+  }
+  saveUser(blob);
+}
+// register listeners for all 6 fields × 4 members
+['', '2', '3', '4'].forEach(suf => {
+  ['iName','iEmpno','iMail','iPhone','iDept','iWard'].forEach(base => {
+    const el = $(base + suf);
+    if (!el) return;
+    el.addEventListener('input', () => {
+      // 員編：只允許數字，最多 6 碼
+      if (base === 'iEmpno') {
+        const cleaned = el.value.replace(/\D/g, '').slice(0, 6);
+        if (el.value !== cleaned) el.value = cleaned;
+      }
+      persistUser();
+      renderSteps();
+      renderCTA();
+      if (suf) updateAccPreview(parseInt(suf, 10));
+    });
+  });
+});
+
+function currentUser() {
+  // primary's data (backward-compat shape)
+  return memberAt(1);
+}
+function partyMembers() {
+  // 4-person mandatory: always return primary + 3 sub-members
+  return [1,2,3,4].map(n => memberAt(n));
+}
+function partyNames() {
+  return partyMembers().map(m => m.name);
+}
+function partySize() { return partyNames().length; }
+
+// ── accordion control ──
+function updateAccPreview(n) {
+  const m = memberAt(n);
+  const acc = document.querySelector('.acc[data-mid="' + n + '"]');
+  const prev = $('iName' + n + 'Preview');
+  if (m.name) {
+    acc.classList.add('filled');
+    prev.textContent = m.name;
+  } else {
+    acc.classList.remove('filled');
+    prev.textContent = '';
+  }
+}
+document.querySelectorAll('.acc-tog').forEach(btn => {
+  btn.addEventListener('click', () => btn.parentElement.classList.toggle('open'));
+});
+// consent checkbox
+function consentAllChecked() {
+  return $('iConsent').checked;
+}
+function refreshConsentUI() {
+  document.querySelector('.consent').classList.toggle('checked', consentAllChecked());
+}
+$('iConsent').addEventListener('change', () => {
+  refreshConsentUI();
+  renderCTA();
+});
+
+// init: any sub-member with a name should default-expand
+[2,3,4].forEach(n => {
+  updateAccPreview(n);
+  if (memberAt(n).name) {
+    document.querySelector('.acc[data-mid="' + n + '"]').classList.add('open');
+  }
+});
+const REQUIRED_FIELDS = [
+  { key: 'name',  label: '姓名' },
+  { key: 'empno', label: '員編' },
+  { key: 'phone', label: '電話' },
+  { key: 'mail',  label: 'Email' },
+  { key: 'dept',  label: '實習科部' },
+  { key: 'ward',  label: '實習病房單位' }
+];
+function missingFields() {
+  const u = currentUser();
+  const miss = REQUIRED_FIELDS.filter(f => !u[f.key]).map(f => f.label);
+
+  // sub-members 2/3/4: ALL 6 fields required (4-person mandatory)
+  const subKeys = ['name','empno','phone','mail','dept','ward'];
+  const subLabels = { name:'姓名', empno:'員編', phone:'電話', mail:'Email', dept:'實習科部', ward:'實習病房單位' };
+  [2,3,4].forEach(n => {
+    const m = memberAt(n);
+    subKeys.forEach(k => {
+      if (!m[k]) miss.push(`成員${n}-${subLabels[k]}`);
+    });
+  });
+  return miss;
+}
+function hasIdentity() {
+  return missingFields().length === 0;
+}
+
+// ────────── render: steps ──────────
+function renderSteps() {
+  const hi = hasIdentity();
+  const hd = !!selectedDate;
+  const hs = selectedSlots.size > 0;
+
+  function set(id, state) {
+    const el = $(id);
+    el.classList.remove('active','done');
+    if (state) el.classList.add(state);
+  }
+  // new order: 1.date → 2.slot → 3.identity → 4.submit
+  set('step1', hd ? 'done' : 'active');
+  set('step2', hs ? 'done' : (hd ? 'active' : ''));
+  set('step3', hi ? 'done' : (hs ? 'active' : ''));
+  set('step4', (hd && hs && hi) ? 'active' : '');
+}
+
+// ────────── render: calendar ──────────
+function renderCalendar() {
+  const slots = getSlots();
+  const today = new Date(); today.setHours(0,0,0,0);
+  const todayISO = today.toISOString().slice(0,10);
+
+  // build availability set: dates that have at least one not-past slot
+  const availSet = new Set();
+  slots.forEach(s => {
+    if (!isPast(s.date, s.end)) availSet.add(s.date);
+  });
+
+  // auto-select first available date if none selected
+  if (!selectedDate) {
+    const sorted = [...availSet].sort();
+    if (sorted.length) selectedDate = sorted[0];
+  }
+
+  // jump calBase to selectedDate's month if it's outside view
+  if (selectedDate) {
+    const sd = new Date(selectedDate + 'T00:00:00');
+    if (sd.getFullYear() !== calBase.getFullYear() || sd.getMonth() !== calBase.getMonth()) {
+      calBase = new Date(sd.getFullYear(), sd.getMonth(), 1);
+    }
+  }
+
+  const wrap = $('calMonths');
+  wrap.innerHTML = '';
+  wrap.appendChild(renderMonth(calBase, availSet, todayISO));
+  $('calTitle').textContent = `${calBase.getFullYear()}年${calBase.getMonth()+1}月`;
+
+  // prev arrow disabled at calMin
+  $('calPrev').disabled = (calBase.getFullYear() === calMin.getFullYear() && calBase.getMonth() === calMin.getMonth());
+  // next: allow indefinite
+}
+
+function renderMonth(monthDt, availSet, todayISO) {
+  const y = monthDt.getFullYear(), m = monthDt.getMonth();
+  const firstDow = new Date(y, m, 1).getDay();      // 0..6 (Sun..Sat)
+  const lastDate = new Date(y, m + 1, 0).getDate(); // last day-of-month
+
+  const month = document.createElement('div');
+  month.className = 'cal-month';
+
+  const dow = document.createElement('div');
+  dow.className = 'cal-dow';
+  DOW.forEach(d => {
+    const c = document.createElement('div'); c.textContent = d; dow.appendChild(c);
+  });
+  month.appendChild(dow);
+
+  const grid = document.createElement('div');
+  grid.className = 'cal-grid';
+
+  // leading empties
+  for (let i = 0; i < firstDow; i++) {
+    const c = document.createElement('div'); c.className = 'cal-cell empty'; c.textContent = '·';
+    grid.appendChild(c);
+  }
+  for (let d = 1; d <= lastDate; d++) {
+    const iso = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const cell = document.createElement('div');
+    cell.className = 'cal-cell';
+    cell.textContent = d;
+
+    const isToday = iso === todayISO;
+    const isPastDay = iso < todayISO;
+    const hasSlot = availSet.has(iso);
+
+    if (isPastDay) cell.classList.add('past');
+    else if (!hasSlot) cell.classList.add('no-slot');
+
+    if (isToday) cell.classList.add('today');
+    if (iso === selectedDate) cell.classList.add('selected');
+
+    if (!isPastDay && hasSlot) {
+      cell.onclick = () => {
+        selectedDate = iso;
+        // 跨日累計：不清空已選時段
+        renderAll();
+      };
+    }
+    grid.appendChild(cell);
+  }
+  month.appendChild(grid);
+  return month;
+}
+
+$('calPrev').onclick = () => {
+  const prev = new Date(calBase.getFullYear(), calBase.getMonth() - 1, 1);
+  if (prev.getTime() < calMin.getTime()) return;
+  calBase = prev;
+  renderCalendar();
+};
+$('calNext').onclick = () => {
+  calBase = new Date(calBase.getFullYear(), calBase.getMonth() + 1, 1);
+  renderCalendar();
+};
+
+// ────────── render: slot grid ──────────
+function renderSlots() {
+  const wrap = $('slots');
+  const hint = $('slotHint');
+  wrap.innerHTML = '';
+  const me = currentUser();
+  const mk = userKey(me);
+
+  // notice：未湊滿 4 人完整資料時提醒
+  const notice = $('needPartyNotice');
+  if (notice) notice.hidden = missingFields().length === 0;
+
+  if (!selectedDate) {
+    hint.innerHTML = '可複選，最多 <strong style="color:var(--brand);">3 個</strong>（可跨日）';
+    wrap.innerHTML = '<div class="empty" style="grid-column:1/-1;"><div class="ico">📅</div>請先選擇日期</div>';
+    return;
+  }
+  const picked = selectedSlots.size;
+  const pickedSummary = (() => {
+    if (!picked) return '';
+    const all = getSlots()
+      .filter(x => selectedSlots.has(x.id))
+      .sort((a,b) => (a.date+a.start).localeCompare(b.date+b.start));
+    return ' · ' + all.map(s =>
+      `<span class="picked-pill">${fmtDate(s.date).replace(/（.*?）/,'')} ${s.start}</span>`
+    ).join('');
+  })();
+  // 員編剩餘配額提示（4 人中最緊的那位）
+  const empnos = partyEmpnos();
+  let quotaInfo = '';
+  if (LIMIT_ENABLED && empnos.length) {
+    const tightest = empnos
+      .map(e => ({ empno: e, used: countActiveBookingsByEmpno(e) }))
+      .sort((a,b) => b.used - a.used)[0];
+    const remain = Math.max(0, MAX_BOOKINGS_PER_EMPNO - tightest.used);
+    quotaInfo = ` · 員編 ${tightest.empno} 還可預約 <strong style="color:${remain > 0 ? 'var(--success)' : 'var(--danger)'};">${remain}</strong> 次（上限 ${MAX_BOOKINGS_PER_EMPNO}）`;
+  }
+  hint.innerHTML = `${fmtDate(selectedDate)} · 已選 <strong style="color:var(--brand);">${picked}/${MAX_SLOTS}</strong>${quotaInfo}${pickedSummary}`;
+  const slots = getSlots()
+    .filter(s => s.date === selectedDate)
+    .sort((a,b) => a.start.localeCompare(b.start));
+
+  if (!slots.length) {
+    wrap.innerHTML = '<div class="empty" style="grid-column:1/-1;"><div class="ico">🪑</div>當日尚無開放時段</div>';
+    return;
+  }
+
+  slots.forEach(s => {
+    const past = isPast(s.date, s.end);
+    const cnt = s.members.length;
+    const full = cnt >= s.capacity;
+    const joined = s.members.some(m => userKey(m) === mk);
+    const pct = Math.min(100, (cnt / s.capacity) * 100);
+
+    const el = document.createElement('div');
+    el.className = 'slot';
+    if (past) el.classList.add('disabled');
+    else if (joined) el.classList.add('joined');
+    else if (full) el.classList.add('full');
+    const isPicked = !past && !joined && !full && selectedSlots.has(s.id);
+    if (isPicked) el.classList.add('selected');
+
+    let tag;
+    if (past) tag = '<span class="tag past">已過期</span>';
+    else if (joined) tag = '<span class="tag joined">已報名</span>';
+    else if (full) tag = '<span class="tag full">已滿</span>';
+    else if (isPicked) tag = '<span class="tag joined">✓ 已選</span>';
+    else tag = '<span class="tag avail">可預約</span>';
+
+    el.innerHTML = `
+      <div class="t">${s.start}–${s.end} ${tag}</div>
+      <div class="p">📍 ${escapeHtml(s.place)}</div>
+    `;
+    el.onclick = () => {
+      if (past) return;
+      if (joined) { confirmLeave(s.id); return; }
+      if (full)   { toast('此時段已滿', '8 人 / 2 組已預約完畢', 'warn'); return; }
+      if (selectedSlots.has(s.id)) {
+        selectedSlots.delete(s.id);
+        renderAll();
+        return;
+      }
+      if (selectedSlots.size >= MAX_SLOTS) {
+        toast(`最多選 ${MAX_SLOTS} 個時段`, '請先取消其中一個再選新的', 'warn');
+        return;
+      }
+      // 員編配額：4 人各自最多 3 次（含已預約的 + 本次想新增的）
+      if (LIMIT_ENABLED) {
+        const blockingEmpno = partyEmpnos().find(emp =>
+          countActiveBookingsByEmpno(emp) + selectedSlots.size + 1 > MAX_BOOKINGS_PER_EMPNO
+        );
+        if (blockingEmpno) {
+          const used = countActiveBookingsByEmpno(blockingEmpno);
+          toast('已達員編預約上限', `員編 ${blockingEmpno} 已預約 ${used} 次，最多 ${MAX_BOOKINGS_PER_EMPNO} 次`, 'warn');
+          return;
+        }
+      }
+      // 提示：未湊滿 4 人資料仍可預選，但送出前必須補齊
+      const miss = missingFields();
+      if (miss.length) {
+        toast('未滿 4 人不可預約報名', '已先勾選，請到下方步驟 3 補齊 4 人完整資料', 'warn');
+      }
+      selectedSlots.add(s.id);
+      // 點時段後檢查：是否有已勾的模具在此時段已額滿
+      const conflicts = [...selectedModels]
+        .map(id => MODELS.find(m => m.id === id))
+        .filter(Boolean)
+        .filter(m => isModelBlocked(m.name));
+      if (conflicts.length) {
+        toast('已選模具與此時段衝突', `${conflicts.map(m => m.name).join('、')} 於此時段已被其他組訂滿，請改選其他模具`, 'warn');
+      }
+      renderAll();
+    };
+    wrap.appendChild(el);
+  });
+}
+
+// ────────── render: models ──────────
+const MAX_MODELS = 2;
+function renderModels() {
+  const wrap = $('models');
+  wrap.innerHTML = '';
+  const reachedMax = selectedModels.size >= MAX_MODELS;
+  MODELS.forEach(m => {
+    const isOn = selectedModels.has(m.id);
+    const blocked = !isOn && isModelBlocked(m.name);
+    const isLocked = (reachedMax && !isOn) || blocked;
+    const max = MODEL_INVENTORY[m.name] || 2;
+    const el = document.createElement('div');
+    el.className = 'model' + (isOn ? ' checked' : '') + (isLocked ? ' locked' : '') + (blocked ? ' blocked' : '');
+    el.innerHTML = `
+      <div class="m-ico">${m.ico}</div>
+      <div class="m-name">${m.name}${blocked ? ` <span style="font-size:.6875rem;color:var(--danger);font-weight:700;">(額滿)</span>` : ''}</div>
+      <div class="m-tick">✓</div>
+    `;
+    el.onclick = () => {
+      if (selectedModels.has(m.id)) {
+        selectedModels.delete(m.id);
+      } else {
+        if (isModelBlocked(m.name)) {
+          toast(`${m.name} 已額滿`, `此模具於所選時段上限 ${max} 組，無法再選`, 'warn');
+          return;
+        }
+        if (selectedModels.size >= MAX_MODELS) {
+          toast(`最多選 ${MAX_MODELS} 項`, '請先取消其中一項再選新的', 'warn');
+          return;
+        }
+        selectedModels.add(m.id);
+      }
+      persistUser();
+      renderModels();
+      renderCTA();
+      renderSummary();
+    };
+    wrap.appendChild(el);
+  });
+}
+
+// ────────── render: CTA ──────────
+function renderCTA() {
+  const info = $('ctaInfo');
+  const btn = $('ctaBtn');
+  // ① 日期
+  if (!selectedDate) {
+    info.innerHTML = '① 請選擇日期';
+    btn.disabled = true; btn.textContent = '送出報名';
+    return;
+  }
+  // ② 時段
+  if (selectedSlots.size === 0) {
+    info.innerHTML = '② 請選擇時段（最多 3 個）';
+    btn.disabled = true; btn.textContent = '送出報名';
+    return;
+  }
+  // ③ 個人資料
+  const miss = missingFields();
+  if (miss.length) {
+    info.innerHTML = `③ 請填寫：<b>${miss.join('、')}</b>`;
+    btn.disabled = true; btn.textContent = '送出報名';
+    return;
+  }
+  // ④ 模具至少 1 項
+  if (selectedModels.size === 0) {
+    info.innerHTML = '④ 請選擇技能練習模具（至少 1 項）';
+    btn.disabled = true; btn.textContent = '送出報名';
+    return;
+  }
+  // ⑤ 同意條款
+  if (!consentAllChecked()) {
+    info.innerHTML = '請勾選下方同意條款';
+    btn.disabled = true; btn.textContent = '送出報名';
+    return;
+  }
+  const slots = getSlots();
+  const chosen = [...selectedSlots]
+    .map(id => slots.find(x => x.id === id))
+    .filter(Boolean)
+    .sort((a,b) => (a.date+a.start).localeCompare(b.date+b.start));
+  if (!chosen.length) { info.innerHTML = '時段不存在'; btn.disabled = true; return; }
+  const summary = chosen.map(s => `${fmtDate(s.date).replace(/（.*?）/,'')} ${s.start}`).join('、');
+  info.innerHTML = `已選 ${chosen.length} 個時段 · <b>${summary}</b>`;
+  btn.disabled = false;
+  btn.textContent = `送出（${chosen.length} 個時段 × 4 人）`;
+}
+
+$('ctaBtn').onclick = () => {
+  // ① 日期
+  if (!selectedDate) { toast('① 請先選擇日期', '', 'warn'); return; }
+  // ② 時段
+  if (selectedSlots.size === 0) { toast('② 請先選擇時段', '', 'warn'); return; }
+  // ③ 個人資料 24 欄
+  const miss = missingFields();
+  if (miss.length) { toast('③ 個人資料未填齊', '請填寫：' + miss.join('、'), 'warn'); return; }
+  // ④ 模具至少 1 項
+  if (selectedModels.size === 0) { toast('④ 請選擇技能練習模具', '至少選 1 項才能送出', 'warn'); return; }
+  // ⑤ 同意條款
+  if (!consentAllChecked()) { toast('請勾選同意條款', '需確認實習科部同意 + 資料正確', 'warn'); return; }
+  const me = currentUser();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(me.mail)) { toast('Email 格式不正確', '請確認後再送出', 'warn'); return; }
+  // 員編格式驗證：4 人都必須是 6 碼數字
+  for (let n = 1; n <= 4; n++) {
+    const m = memberAt(n);
+    if (!/^\d{6}$/.test(m.empno)) {
+      toast('員編格式不正確', `成員 ${n} 的員編必須是 6 碼數字`, 'warn');
+      return;
+    }
+  }
+  // 同一組內不允許員編 / Email 重複
+  const seenEmpno = {};
+  const seenMail = {};
+  for (let n = 1; n <= 4; n++) {
+    const m = memberAt(n);
+    if (seenEmpno[m.empno]) {
+      toast('員編重複', `成員 ${seenEmpno[m.empno]} 與 成員 ${n} 員編相同（${m.empno}），同一組不可填同一人`, 'warn');
+      return;
+    }
+    seenEmpno[m.empno] = n;
+    const mailLower = (m.mail || '').toLowerCase();
+    if (seenMail[mailLower]) {
+      toast('Email 重複', `成員 ${seenMail[mailLower]} 與 成員 ${n} Email 相同（${m.mail}），同一組不可填同一人`, 'warn');
+      return;
+    }
+    seenMail[mailLower] = n;
+  }
+
+  const slots = getSlots();
+  const targets = [...selectedSlots]
+    .map(id => slots.find(x => x.id === id))
+    .filter(Boolean)
+    .sort((a,b) => a.start.localeCompare(b.start));
+  if (!targets.length) { toast('時段不存在', '', 'warn'); return; }
+
+  // 提前取得 4 位成員資料，後續驗證都會用到
+  const party = partyMembers();
+
+  // pre-flight check: any target full or duplicate?
+  const conflict = targets.find(s => s.capacity - s.members.length < 4);
+  if (conflict) {
+    toast('時段名額不足', `${conflict.start}–${conflict.end} 剩餘名額不足 4 人`, 'warn');
+    return;
+  }
+  // 員編配額：4 人各自含本次新增不可超過上限
+  if (LIMIT_ENABLED) {
+    for (const m of party) {
+      if (!m.empno) continue;
+      const existed = countActiveBookingsByEmpno(m.empno);
+      if (existed + targets.length > MAX_BOOKINGS_PER_EMPNO) {
+        toast('員編預約超過上限', `員編 ${m.empno}（${m.name}）已預約 ${existed} 次，加 ${targets.length} 次將超過上限 ${MAX_BOOKINGS_PER_EMPNO} 次`, 'warn');
+        return;
+      }
+    }
+  }
+  // 模具庫存檢查：每個選中的模具對每個選中的時段都不可超過上限
+  for (const id of selectedModels) {
+    const m = MODELS.find(x => x.id === id);
+    if (!m) continue;
+    const max = MODEL_INVENTORY[m.name] || 2;
+    for (const s of targets) {
+      const used = s.members.filter(mm => mm.primary && (mm.models || []).includes(m.name)).length;
+      if (used >= max) {
+        toast(`${m.name} 已額滿`, `${s.start}–${s.end} 此模具上限 ${max} 組`, 'warn');
+        return;
+      }
+    }
+  }
+  const dup = targets.find(s => s.members.some(m => userKey(m) === userKey(me)));
+  if (dup) {
+    toast('已重複報名', `${dup.start}–${dup.end} 您已在名單中`, 'warn');
+    return;
+  }
+
+  const ts = Date.now();
+  const modelLabels = [...selectedModels]
+    .map(id => (MODELS.find(m => m.id === id) || {}).name)
+    .filter(Boolean);
+
+  function buildMembers(baseTs) {
+    const groupId = 'G' + baseTs;
+    return party.map((m, idx) => ({
+      name:  m.name,
+      empno: m.empno,
+      mail:  m.mail,
+      phone: m.phone,
+      dept:  m.dept,
+      ward:  m.ward,
+      primary: idx === 0,
+      leader: idx === 0 ? '' : me.name,
+      models: idx === 0 ? modelLabels : [],
+      groupId,
+      ts: baseTs + idx
+    }));
+  }
+
+  // summary list
+  const slotList = targets.map(s =>
+    `<div class="row"><span class="l">${fmtDate(s.date)}</span><span class="v">${s.start} – ${s.end}</span></div>`
+  ).join('');
+
+  // roster preview (same 4 people for all chosen slots)
+  const rosterHtml = (() => {
+    const lines = party.map((m, k) =>
+      `<div class="item me">${k+1}. ${escapeHtml(m.name)}${k === 0 ? '（您）' : '（同行）'}</div>`
+    );
+    return `<div style="font-size:.75rem;color:var(--ink-soft);margin-bottom:.375rem;">${targets.length} 個時段同步報名以下 4 位</div>${lines.join('')}`;
+  })();
+
+  openModal({
+    title: '確認報名',
+    sub: `將同時為 4 位成員預約 ${targets.length} 個時段。`,
+    summary: slotList +
+      `<div class="row"><span class="l">地點</span><span class="v">${escapeHtml(targets[0].place)}</span></div>` +
+      (modelLabels.length ? `<div class="row"><span class="l">練習模具</span><span class="v">${modelLabels.map(escapeHtml).join('、')}</span></div>` : ''),
+    roster: rosterHtml,
+    okText: '確認送出',
+    onOk: async () => {
+      const payloadMembers = party.map((m, idx) => ({
+        name: m.name, empno: m.empno, mail: m.mail, phone: m.phone,
+        dept: m.dept, ward: m.ward,
+        models: idx === 0 ? modelLabels : []
+      }));
+      const d = await apiPost({
+        action: 'book',
+        slotIds: targets.map(s => s.id),
+        members: payloadMembers,
+        ts
+      });
+      if (!applyData(d)) { toast('預約失敗', (d && d.error) || '請稍後再試', 'danger'); renderAll(); return; }
+      selectedSlots.clear();
+      $('iConsent').checked = false;
+      refreshConsentUI();
+      renderAll();
+      toast('🎉 預約成功！', `已成功預約 ${targets.length} 個時段`, 'success');
+    }
+  });
+};
+
+function confirmLeave(slotId) {
+  const slots = getSlots();
+  const s = slots.find(x => x.id === slotId);
+  if (!s) return;
+  const me = currentUser();
+
+  // 找出該時段中我的主要成員（必須是 primary 且 email+name 對得上）
+  const myPrimary = s.members.find(m => m.primary && userKey(m) === userKey(me));
+  if (!myPrimary) {
+    toast('找不到您的報名紀錄', '', 'warn');
+    return;
+  }
+  // 整組 4 人：優先用 groupId 比對，舊資料 fallback 用 leader 名稱
+  const gid = myPrimary.groupId;
+  const groupMembers = s.members.filter(m => {
+    if (gid && m.groupId) return m.groupId === gid;
+    if (m === myPrimary) return true;
+    if (!m.primary && m.leader === myPrimary.name) return true;
+    return false;
+  });
+
+  openModal({
+    title: '取消預約',
+    sub: `將取消這個時段共 ${groupMembers.length} 位成員的預約，確定？`,
+    summary: `
+      <div class="row"><span class="l">日期</span><span class="v">${fmtDate(s.date)}</span></div>
+      <div class="row"><span class="l">時間</span><span class="v">${s.start} – ${s.end}</span></div>
+      <div class="row"><span class="l">地點</span><span class="v">${escapeHtml(s.place)}</span></div>
+      <div class="row"><span class="l">取消人數</span><span class="v">${groupMembers.length} 位</span></div>
+    `,
+    roster: `<div style="font-size:.75rem;color:var(--ink-soft);margin-bottom:.375rem;">將移除以下成員</div>` +
+      groupMembers.map((m,i) => `<div class="item">${i+1}. ${escapeHtml(m.name)}${m.primary ? '（您）' : '（同行）'}</div>`).join(''),
+    okText: '確認取消',
+    onOk: async () => {
+      if (!gid) { toast('無法取消', '此筆缺少群組編號，請洽管理員', 'danger'); return; }
+      const d = await apiPost({ action: 'cancelGroup', slotId: s.id, groupId: gid });
+      if (!applyData(d)) { toast('取消失敗', (d && d.error) || '請稍後再試', 'danger'); renderAll(); return; }
+      renderAll();
+      toast('已取消預約', `${groupMembers.length} 位成員已從此時段移除`, 'warn');
+    }
+  });
+}
+
+// 取消通知（與 fireOpen 相同收件人結構，主旨改為取消）
+function fireCancel(slot, removedMembers) {
+  let admins = [];
+  try {
+    const raw = localStorage.getItem('fps_recipients');
+    if (raw) admins = JSON.parse(raw) || [];
+  } catch {}
+  const studentMails = removedMembers.map(m => m.mail).filter(Boolean);
+  const allRecipients = [...new Set([...studentMails, ...admins])];
+
+  const subject = '【國考前四人成行】預約取消通知';
+  const body =
+`Dear 同學 / 老師
+
+以下 ${removedMembers.length} 位成員已取消模擬診間時段預約：
+
+日期：${fmtDate(slot.date)}
+時間：${slot.start} – ${slot.end}
+地點：${slot.place}
+
+取消成員：
+${removedMembers.map((m,i) => `${i+1}. ${m.name}（員編：${m.empno || '-'}）`).join('\n')}
+
+— 國考前四人成行預約系統`;
+
+  console.log('===== 預約取消通知 =====');
+  console.log('學員收件人（' + studentMails.length + '）：', studentMails);
+  console.log('老師收件人（' + admins.length + '）：', admins);
+  console.log('合計收件人（' + allRecipients.length + '）：', allRecipients);
+  console.log('主旨：', subject);
+  console.log(body);
+  // TODO: 串接 email API
+}
+
+// ────────── notification stub ──────────
+function fireOpen(slot, newMembers) {
+  // 取出本次新加入的 4 位學員（如果沒帶就 fallback 為 slot 全體）
+  const party = (newMembers && newMembers.length) ? newMembers : slot.members;
+  // 後台「📧 通知名單」設定的固定收件人（老師）
+  let admins = [];
+  try {
+    const raw = localStorage.getItem('fps_recipients');
+    if (raw) admins = JSON.parse(raw) || [];
+  } catch {}
+
+  const studentMails = party.map(m => m.mail).filter(Boolean);
+  const allRecipients = [...new Set([...studentMails, ...admins])]; // 去重
+
+  const subject = '【國考前四人成行】預約成功通知';
+  const body =
+`Dear 同學 / 老師
+
+以下 4 位成員已成功預約模擬診間時段：
+
+日期：${fmtDate(slot.date)}
+時間：${slot.start} – ${slot.end}
+地點：${slot.place}
+
+成員：
+${party.map((m,i) =>
+`${i+1}. ${m.name}（員編：${m.empno || '-'}）
+   📧 ${m.mail || '-'} · 📞 ${m.phone || '-'}
+   🏥 ${m.dept || '-'} · 🛏 ${m.ward || '-'}`
+).join('\n')}
+
+${party[0] && party[0].models && party[0].models.length
+  ? '練習模具：' + party[0].models.join('、') + '\n\n'
+  : ''}請準時到場，一起加油！
+
+— 國考前四人成行預約系統`;
+
+  console.log('===== 預約成功通知 =====');
+  console.log('學員收件人（' + studentMails.length + '）：', studentMails);
+  console.log('老師收件人（' + admins.length + '）：', admins);
+  console.log('合計收件人（' + allRecipients.length + '）：', allRecipients);
+  console.log('主旨：', subject);
+  console.log(body);
+
+  // TODO: 在此處呼叫 Gmail API / EmailJS / Apps Script
+  // sendEmailViaXXX({ to: allRecipients, subject, body });
+}
+
+// ────────── render all ──────────
+function renderAll() {
+  renderSteps();
+  renderCalendar();
+  renderSlots();
+  renderModels();
+  renderPartyProgress();
+  renderCTA();
+  renderSummary();
+  renderMine();
+}
+
+// ────────── render: 4 人填寫進度 ──────────
+function renderPartyProgress() {
+  const wrap = document.querySelector('.party-progress');
+  if (!wrap) return;
+  const keys = ['name','empno','phone','mail','dept','ward'];
+  let filled = 0;
+  for (let n = 1; n <= 4; n++) {
+    const m = memberAt(n);
+    const allFilled = keys.every(k => m[k] && (k !== 'empno' || /^\d{6}$/.test(m[k])));
+    const chip = $('ppChip' + n);
+    if (allFilled) { filled++; chip.classList.add('done'); }
+    else { chip.classList.remove('done'); }
+  }
+  $('ppCount').textContent = filled;
+  $('ppBar').style.width = (filled / 4 * 100) + '%';
+  wrap.classList.remove('p0','p1','p2','p3','p4');
+  wrap.classList.add('p' + filled);
+}
+
+// ────────── render: 我的預約紀錄 ──────────
+function renderMine() {
+  const sec = $('mineSec');
+  const body = $('mine');
+  if (!hasIdentity()) { sec.hidden = true; return; }
+  const me = currentUser();
+  const mk = userKey(me);
+  const list = getSlots()
+    .filter(s => s.members.some(m => m.primary && userKey(m) === mk))
+    .sort((a,b) => (a.date+a.start).localeCompare(b.date+b.start));
+  if (!list.length) { sec.hidden = true; return; }
+  sec.hidden = false;
+  body.innerHTML = list.map(s => {
+    const past = isPast(s.date, s.end);
+    return `
+      <div class="mine-item">
+        <div class="mi-icon">📅</div>
+        <div class="mi-body">
+          <div class="mi-date">${fmtDate(s.date)} ${s.start}–${s.end}</div>
+          <div class="mi-meta">📍 ${escapeHtml(s.place)} · 整組 4 人</div>
+        </div>
+        ${past ? '<span style="color:var(--ink-mute);font-size:.75rem;">已過期</span>' : `<button class="mi-x danger" data-id="${s.id}">⚠️ 取消整組 4 人報名</button>`}
+      </div>
+    `;
+  }).join('');
+  body.querySelectorAll('.mi-x').forEach(b => {
+    b.onclick = () => confirmLeave(b.dataset.id);
+  });
+}
+
+// ────────── render: 已勾選摘要 ──────────
+function renderSummary() {
+  const sec = $('summarySec');
+  const body = $('summaryBody');
+  const hasSlots = selectedSlots.size > 0;
+  const hasModels = selectedModels.size > 0;
+  if (!hasSlots && !hasModels) { sec.hidden = true; return; }
+  sec.hidden = false;
+
+  const parts = [];
+
+  if (hasSlots) {
+    const list = getSlots()
+      .filter(x => selectedSlots.has(x.id))
+      .sort((a,b) => (a.date+a.start).localeCompare(b.date+b.start));
+    parts.push(`
+      <div class="sum-row">
+        <div class="sum-lbl">📅 已勾選時段（${list.length}/${MAX_SLOTS}）</div>
+        <div class="sum-chips">
+          ${list.map(s => `<span class="sum-chip">${fmtDate(s.date)} ${s.start}–${s.end}</span>`).join('')}
+        </div>
+      </div>
+    `);
+  }
+
+  if (hasModels) {
+    const list = [...selectedModels]
+      .map(id => MODELS.find(m => m.id === id))
+      .filter(Boolean);
+    parts.push(`
+      <div class="sum-row">
+        <div class="sum-lbl">🧰 已勾選模具（${list.length}/${MAX_MODELS}）</div>
+        <div class="sum-chips">
+          ${list.map(m => `<span class="sum-chip">${m.ico} ${escapeHtml(m.name)}</span>`).join('')}
+        </div>
+      </div>
+    `);
+  }
+
+  body.innerHTML = parts.join('');
+}
+renderAll();   // 先用空/快取資料畫一次
+loadData();    // 再向後端抓取最新資料並重繪
+</script>
+
+</body>
+</html>
