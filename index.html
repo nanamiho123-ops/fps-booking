@@ -796,7 +796,7 @@ a { color: inherit; }
   <!-- Step 2: time slot -->
   <div class="sec">
     <h2><span class="num">2</span>選擇時段</h2>
-    <div class="hint" id="slotHint">可複選，最多 <strong style="color:var(--brand);">3 個</strong>（可跨日）</div>
+    <div class="hint" id="slotHint">一次限預約 <strong style="color:var(--brand);">1 個</strong>時段</div>
     <div class="notice" id="needPartyNotice" hidden>
       ⚠️ <strong>未滿 4 人不可預約報名</strong> · 請先到下方步驟 3 填妥 4 位成員完整資料
     </div>
@@ -1120,7 +1120,7 @@ $('modal').addEventListener('click', e => { if (e.target.id === 'modal') closeMo
 let selectedDate = null;
 let selectedSlots = new Set();
 let selectedModels = new Set();
-const MAX_SLOTS = 3;
+const MAX_SLOTS = 1;
 // calendar shows two months side-by-side starting from this month
 let calBase = (() => { const d = new Date(); d.setHours(0,0,0,0); d.setDate(1); return d; })();
 const calMin = (() => { const d = new Date(); d.setHours(0,0,0,0); d.setDate(1); return d; })();
@@ -1459,7 +1459,7 @@ function renderSlots() {
   if (notice) notice.hidden = missingFields().length === 0;
 
   if (!selectedDate) {
-    hint.innerHTML = '可複選，最多 <strong style="color:var(--brand);">3 個</strong>（可跨日）';
+    hint.innerHTML = '一次限預約 <strong style="color:var(--brand);">1 個</strong>時段';
     wrap.innerHTML = '<div class="empty" style="grid-column:1/-1;"><div class="ico">📅</div>請先選擇日期</div>';
     return;
   }
@@ -1616,7 +1616,7 @@ function renderCTA() {
   }
   // ② 時段
   if (selectedSlots.size === 0) {
-    info.innerHTML = '② 請選擇時段（最多 3 個）';
+    info.innerHTML = '② 請選擇時段（限 1 個）';
     btn.disabled = true; btn.textContent = '送出報名';
     return;
   }
