@@ -619,6 +619,68 @@ a { color: inherit; }
   box-shadow: 0 4px 12px rgba(239,68,68,.3);
 }
 
+/* ── 我的預約：置頂區塊強化 ──────────────────────── */
+.mine-sec {
+  background: var(--brand-soft);
+  border-top: 3px solid var(--brand);
+  padding-top: 1rem; padding-bottom: 1rem;
+}
+.mine-count {
+  margin-left: auto; font-size: .75rem; font-weight: 700;
+  background: var(--brand); color: white;
+  border-radius: 999px; padding: .125rem .5rem;
+}
+.sec h2 { display: flex; align-items: center; }
+.mine-item { flex-wrap: wrap; }
+.mine-item .mi-party {
+  font-size: .75rem; color: var(--ink-soft); margin-top: .25rem;
+  overflow-wrap: anywhere;
+}
+.mine-item .mi-role {
+  display: inline-block; font-size: .6875rem; font-weight: 700;
+  border-radius: 999px; padding: .0625rem .4375rem; margin-left: .375rem;
+  background: var(--brand-soft); color: var(--brand-dark);
+  border: 1px solid var(--brand-line);
+}
+.mine-item .mi-note {
+  flex-shrink: 0; font-size: .75rem; color: var(--ink-mute);
+  text-align: right; max-width: 9rem;
+}
+
+/* ── 查詢我的預約 ────────────────────────────────── */
+.lookup-card {
+  border: 1px dashed var(--line); border-radius: 12px;
+  padding: .875rem 1rem; background: var(--line-soft);
+}
+.lookup-head { font-size: .875rem; font-weight: 700; color: var(--ink); }
+.lookup-sub { font-size: .75rem; color: var(--ink-soft); margin-top: .1875rem; }
+.lookup-row { display: flex; gap: .5rem; margin-top: .625rem; }
+.lookup-row input {
+  flex: 1; min-width: 0; border: 1.5px solid var(--line); border-radius: 9px;
+  padding: .5rem .625rem; font-size: .875rem; background: var(--paper);
+}
+.lookup-row input:focus { outline: none; border-color: var(--brand); }
+.lookup-btn {
+  flex-shrink: 0; border: none; border-radius: 9px;
+  background: var(--brand); color: white; font-weight: 700;
+  padding: .5rem 1rem; font-size: .875rem;
+}
+.lookup-btn:hover { background: var(--brand-dark); }
+.lookup-btn.ghost { background: var(--line); color: var(--ink-soft); }
+.lookup-msg { font-size: .75rem; margin-top: .5rem; min-height: 1rem; }
+.lookup-msg.warn { color: var(--danger); }
+.lookup-msg.ok { color: var(--success); }
+
+/* ── 流程分隔線 ──────────────────────────────────── */
+.flow-divider {
+  display: flex; align-items: center; gap: .625rem;
+  margin: 1.25rem 1.25rem .25rem;
+  color: var(--ink-mute); font-size: .75rem; font-weight: 700;
+}
+.flow-divider::before, .flow-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--line);
+}
+
 /* ── Empty / placeholders ───────────────────────── */
 .empty {
   text-align: center; padding: 2rem 1rem;
@@ -760,6 +822,28 @@ a { color: inherit; }
     <div class="bar"></div>
     <div class="step" id="step4"><div class="n">4</div><span>送出</span></div>
   </div>
+
+  <!-- 我的預約（置頂）──────────────────────────────── -->
+  <div class="sec mine-sec" id="mineSec" hidden>
+    <h2><span class="ico-pill">📋</span>我的預約<span class="mine-count" id="mineCount"></span></h2>
+    <div class="hint" id="mineHint">以下是你目前已成立的預約</div>
+    <div class="mine" id="mine"></div>
+  </div>
+
+  <!-- 查詢我的預約 ──────────────────────────────────── -->
+  <div class="sec">
+    <div class="lookup-card">
+      <div class="lookup-head">🔍 查不到你的預約？</div>
+      <div class="lookup-sub">換手機、換瀏覽器或清過瀏覽紀錄時，可用 Email 或員編查詢</div>
+      <div class="lookup-row">
+        <input id="lookupInput" type="text" placeholder="輸入 Email 或 6 碼員編" maxlength="80" autocomplete="off">
+        <button class="lookup-btn" id="lookupBtn">查詢</button>
+      </div>
+      <div class="lookup-msg" id="lookupMsg"></div>
+    </div>
+  </div>
+
+  <div class="flow-divider"><span>以下開始新增預約</span></div>
 
   <!-- Intro / 進行方式 -->
   <div class="sec">
@@ -926,13 +1010,6 @@ a { color: inherit; }
         <span>此次技能練習均已經過實習科部同意，並確認以上資料皆正確 <span class="req">＊</span></span>
       </label>
     </div>
-  </div>
-
-  <!-- My reservations (cancel-only) -->
-  <div class="sec" id="mineSec" hidden>
-    <h2><span class="ico-pill">📋</span>我的預約紀錄</h2>
-    <div class="hint">點「取消」可整組退出該時段預約</div>
-    <div class="mine" id="mine"></div>
   </div>
 
   <div class="footer-link">
@@ -1802,18 +1879,25 @@ $('ctaBtn').onclick = () => {
   });
 };
 
-function confirmLeave(slotId) {
+function confirmLeave(slotId, wantGid) {
   const slots = getSlots();
   const s = slots.find(x => x.id === slotId);
   if (!s) return;
-  const me = currentUser();
+  const id = myIdentity();
 
-  // 找出該時段中我的主要成員（必須是 primary 且 email+name 對得上）
-  const myPrimary = s.members.find(m => m.primary && userKey(m) === userKey(me));
-  if (!myPrimary) {
+  // 找出該時段中的「我」：Email 或員編對得上即可；若指定了群組則限該組
+  const mine = s.members.find(m => isMe(m, id) && (wantGid ? String(m.groupId) === String(wantGid) : true));
+  if (!mine) {
     toast('找不到您的報名紀錄', '', 'warn');
     return;
   }
+  // (a) 只有代表人可以取消整組
+  if (!mine.primary) {
+    const leader = (s.members.find(m => m.primary && m.groupId === mine.groupId) || {}).name || '';
+    toast('只有代表人可以取消', leader ? '請聯絡代表人 ' + leader : '請聯絡該組代表人', 'warn');
+    return;
+  }
+  const myPrimary = mine;
   // 整組 4 人：優先用 groupId 比對，舊資料 fallback 用 leader 名稱
   const gid = myPrimary.groupId;
   const groupMembers = s.members.filter(m => {
@@ -1958,35 +2042,120 @@ function renderPartyProgress() {
   wrap.classList.add('p' + filled);
 }
 
-// ────────── render: 我的預約紀錄 ──────────
-function renderMine() {
-  const sec = $('mineSec');
-  const body = $('mine');
-  if (!hasIdentity()) { sec.hidden = true; return; }
+// ────────── 身分判定 ──────────
+// 來源有兩種：① 表單上代表人填的資料 ② 使用者用「查詢我的預約」輸入的 Email／員編
+let lookupIdentity = null;
+
+function myIdentity() {
+  if (lookupIdentity) return lookupIdentity;
   const me = currentUser();
-  const mk = userKey(me);
-  const list = getSlots()
-    .filter(s => s.members.some(m => m.primary && userKey(m) === mk))
-    .sort((a,b) => (a.date+a.start).localeCompare(b.date+b.start));
+  return { mail: (me.mail || '').trim().toLowerCase(), empno: (me.empno || '').trim() };
+}
+// 只要 Email 或員編對得上就算同一人 —— 不再要求 4 人資料全填，也不限代表人
+function isMe(m, id) {
+  const mail  = (m.mail  || '').trim().toLowerCase();
+  const empno = String(m.empno || '').trim();
+  if (id.mail  && mail  && mail  === id.mail)  return true;
+  if (id.empno && empno && empno === id.empno) return true;
+  return false;
+}
+// 我出現在哪些時段，並附上「這筆我是不是代表人」與同組成員
+function myBookings() {
+  const id = myIdentity();
+  if (!id.mail && !id.empno) return [];
+  const out = [];
+  getSlots().forEach(s => {
+    const mine = s.members.find(m => isMe(m, id));
+    if (!mine) return;
+    const gid = mine.groupId;
+    const group = s.members.filter(m => (gid && m.groupId) ? m.groupId === gid : m === mine);
+    out.push({ slot: s, mine: mine, gid: gid, group: group });
+  });
+  return out.sort((a, b) => (a.slot.date + a.slot.start).localeCompare(b.slot.date + b.slot.start));
+}
+
+// ────────── render: 我的預約 ──────────
+function renderMine() {
+  const sec  = $('mineSec');
+  const body = $('mine');
+  const list = myBookings();
   if (!list.length) { sec.hidden = true; return; }
   sec.hidden = false;
-  body.innerHTML = list.map(s => {
+
+  $('mineCount').textContent = '共 ' + list.length + ' 筆';
+  $('mineHint').textContent = lookupIdentity
+    ? '「' + (lookupIdentity.label || '') + '」的查詢結果'
+    : '以下是你目前已成立的預約';
+
+  body.innerHTML = list.map(b => {
+    const s = b.slot;
     const past = isPast(s.date, s.end);
+    const leaderName = (b.group.find(m => m.primary) || {}).name || '';
+    const others = b.group.filter(m => m !== b.mine).map(m => m.name).filter(Boolean);
+    const roleTag = '<span class="mi-role">' + (b.mine.primary ? '代表人' : '同行成員') + '</span>';
+
+    let right;
+    if (past) {
+      right = '<span class="mi-note">已過期</span>';
+    } else if (!b.mine.primary) {
+      // (a) 只有代表人能取消：4 人同進退，避免同行成員誤按解散全組
+      right = '<span class="mi-note">僅代表人'
+            + (leaderName ? '（' + escapeHtml(leaderName) + '）' : '') + '可取消</span>';
+    } else if (b.gid) {
+      right = '<button class="mi-x danger" data-id="' + s.id + '" data-gid="' + b.gid + '">⚠️ 取消整組 4 人報名</button>';
+    } else {
+      right = '<span class="mi-note">此筆缺群組編號，請洽管理員</span>';
+    }
+
     return `
       <div class="mine-item">
         <div class="mi-icon">📅</div>
         <div class="mi-body">
-          <div class="mi-date">${fmtDate(s.date)} ${s.start}–${s.end}</div>
-          <div class="mi-meta">📍 ${escapeHtml(s.place)} · 整組 4 人</div>
+          <div class="mi-date">${fmtDate(s.date)} ${s.start}–${s.end}${roleTag}</div>
+          <div class="mi-meta">📍 ${escapeHtml(s.place)} · 整組 ${b.group.length} 人</div>
+          ${others.length ? `<div class="mi-party">👥 同組：${others.map(escapeHtml).join('、')}</div>` : ''}
         </div>
-        ${past ? '<span style="color:var(--ink-mute);font-size:.75rem;">已過期</span>' : `<button class="mi-x danger" data-id="${s.id}">⚠️ 取消整組 4 人報名</button>`}
+        ${right}
       </div>
     `;
   }).join('');
-  body.querySelectorAll('.mi-x').forEach(b => {
-    b.onclick = () => confirmLeave(b.dataset.id);
+
+  body.querySelectorAll('.mi-x').forEach(btn => {
+    btn.onclick = () => confirmLeave(btn.dataset.id, btn.dataset.gid);
   });
 }
+
+// ────────── 查詢我的預約（換裝置／清快取也查得到）──────────
+function runLookup() {
+  const raw = $('lookupInput').value.trim();
+  const msg = $('lookupMsg');
+  if (!raw) {
+    lookupIdentity = null;
+    msg.className = 'lookup-msg warn';
+    msg.textContent = '請先輸入 Email 或 6 碼員編';
+    renderMine();
+    return;
+  }
+  lookupIdentity = raw.indexOf('@') >= 0
+    ? { mail: raw.toLowerCase(), empno: '', label: raw }
+    : { mail: '', empno: raw, label: raw };
+
+  const found = myBookings();
+  renderMine();
+  if (found.length) {
+    msg.className = 'lookup-msg ok';
+    msg.textContent = '找到 ' + found.length + ' 筆，已顯示在上方「我的預約」';
+    $('mineSec').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else {
+    msg.className = 'lookup-msg warn';
+    msg.textContent = '查無「' + raw + '」的預約紀錄，請確認與報名時填的 Email／員編一致';
+  }
+}
+
+$('lookupBtn').onclick = runLookup;
+$('lookupInput').addEventListener('keydown', function (e) {
+  if (e.key === 'Enter') { e.preventDefault(); runLookup(); }
+});
 
 // ────────── render: 已勾選摘要 ──────────
 function renderSummary() {
