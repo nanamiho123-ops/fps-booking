@@ -437,16 +437,22 @@ a { color: inherit; }
   margin: 0; letter-spacing: .02em;
 }
 .cal-dow {
-  display: grid; grid-template-columns: repeat(7, 1fr);
+  display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));
   font-size: .75rem; color: var(--ink-soft); text-align: center;
   margin-bottom: .25rem;
 }
 .cal-dow > div { padding: .125rem 0; font-weight: 500; }
 .cal-grid {
-  display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
+  /* minmax(0,1fr)：不加 0 的話，格子的 aspect-ratio 會產生「自動最小寬度」，
+     使 1fr 縮不下去而撐爆容器（窄螢幕會左右溢出）。 */
+  display: grid; grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-auto-rows: 1fr;   /* 所有列等高，避免月初空白格把第一列撐高 */
+  gap: 4px;
 }
 .cal-cell {
-  aspect-ratio: 1; min-height: 36px;
+  /* width:100% 讓寬度先由欄位決定，aspect-ratio 才不會與 auto 列高互相依賴
+     （否則第一列的空白格會把列高撐大，造成格子重疊） */
+  width: 100%; aspect-ratio: 1; min-height: 36px; min-width: 0;
   display: flex; align-items: center; justify-content: center;
   font-size: .875rem; color: var(--ink); background: white;
   border: 1.5px solid var(--line); border-radius: 6px;
