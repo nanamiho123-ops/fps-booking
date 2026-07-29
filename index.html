@@ -844,6 +844,7 @@ a { color: inherit; }
       <div class="lookup-row">
         <input id="lookupInput" type="text" placeholder="輸入 Email 或 6 碼員編" maxlength="80" autocomplete="off">
         <button class="lookup-btn" id="lookupBtn">查詢</button>
+        <button class="lookup-btn ghost" id="lookupClear" hidden>清除</button>
       </div>
       <div class="lookup-msg" id="lookupMsg"></div>
     </div>
@@ -1903,6 +1904,15 @@ function confirmLeave(slotId, wantGid) {
     toast('只有代表人可以取消', leader ? '請聯絡代表人 ' + leader : '請聯絡該組代表人', 'warn');
     return;
   }
+  // 第二道防線：查詢模式唯讀，且姓名+Email 都必須相符（避免誤刪他人預約）
+  if (lookupIdentity) {
+    toast('查詢僅供檢視', '如需取消，請在下方步驟 3 填入你的姓名與 Email', 'warn');
+    return;
+  }
+  if (!canCancel(mine)) {
+    toast('無法取消', '請確認姓名與 Email 與報名時填寫的完全一致', 'warn');
+    return;
+  }
   const myPrimary = mine;
   // 整組 4 人：優先用 groupId 比對，舊資料 fallback 用 leader 名稱
   const gid = myPrimary.groupId;
@@ -2065,6 +2075,19 @@ function isMe(m, id) {
   if (id.empno && empno && empno === id.empno) return true;
   return false;
 }
+// ── 取消資格（比「檢視」嚴格得多）─────────────────────────────────────────
+// 檢視：Email 或員編對得上就好（方便學生找到自己的預約）
+// 取消：必須是「表單填寫的身分」，且 Email 與姓名都與該筆紀錄相符。
+//       員編是 6 位數且識別證上就有，若允許只憑員編取消，等於任何人都能刪別人的預約。
+function canCancel(m) {
+  if (lookupIdentity) return false;            // 查詢模式一律唯讀
+  if (!m || !m.primary) return false;          // 只有代表人能取消整組
+  const me = currentUser();
+  if (!me.mail || !me.name) return false;
+  return (m.mail || '').trim().toLowerCase() === me.mail.trim().toLowerCase()
+      && (m.name || '').trim() === me.name.trim();
+}
+
 // 我出現在哪些時段，並附上「這筆我是不是代表人」與同組成員
 function myBookings() {
   const id = myIdentity();
@@ -2107,6 +2130,11 @@ function renderMine() {
       // (a) 只有代表人能取消：4 人同進退，避免同行成員誤按解散全組
       right = '<span class="mi-note">僅代表人'
             + (leaderName ? '（' + escapeHtml(leaderName) + '）' : '') + '可取消</span>';
+    } else if (lookupIdentity) {
+      // 查詢模式唯讀：否則任何人打別人的員編就能取消別人的預約
+      right = '<span class="mi-note">查詢僅供檢視<br>如需取消請在下方填寫資料</span>';
+    } else if (!canCancel(b.mine)) {
+      right = '<span class="mi-note">姓名與 Email 需與<br>報名時一致才能取消</span>';
     } else if (b.gid) {
       right = '<button class="mi-x danger" data-id="' + s.id + '" data-gid="' + b.gid + '">⚠️ 取消整組 4 人報名</button>';
     } else {
@@ -2147,6 +2175,7 @@ function runLookup() {
     : { mail: '', empno: raw, label: raw };
 
   const found = myBookings();
+  $('lookupClear').hidden = false;
   renderMine();
   if (found.length) {
     msg.className = 'lookup-msg ok';
@@ -2158,9 +2187,23 @@ function runLookup() {
   }
 }
 
+// 離開查詢模式，回到「用表單身分檢視」（否則會一直停在唯讀狀態，連自己的都不能取消）
+function clearLookup() {
+  lookupIdentity = null;
+  $('lookupInput').value = '';
+  $('lookupMsg').textContent = '';
+  $('lookupMsg').className = 'lookup-msg';
+  $('lookupClear').hidden = true;
+  renderMine();
+}
+
 $('lookupBtn').onclick = runLookup;
+$('lookupClear').onclick = clearLookup;
 $('lookupInput').addEventListener('keydown', function (e) {
   if (e.key === 'Enter') { e.preventDefault(); runLookup(); }
+});
+$('lookupInput').addEventListener('input', function () {
+  if (!this.value.trim() && lookupIdentity) clearLookup();
 });
 
 // ────────── render: 已勾選摘要 ──────────
