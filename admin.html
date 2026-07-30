@@ -605,7 +605,13 @@ let _adminPw = '';   // 登入成功後記住，供「改密碼 / 重置 / 清�
 const LS_CACHE = 'fps_cache_v2';
 
 function apiConfigured() { return /^https:\/\/script\.google\.com\//.test(API_URL); }
-async function apiGetData() { const r = await fetch(API_URL + '?action=getData'); return r.json(); }
+// 含個資的完整資料只能憑管理員密碼取得（後端 getAdminData）。
+// 未登入時退回公開資料（已去識別化，只有人數），僅供顯示用。
+async function apiGetData() {
+  if (_adminPw) return apiPost({ action: 'getAdminData', password: _adminPw });
+  const r = await fetch(API_URL + '?action=getData');
+  return r.json();
+}
 async function apiPost(payload) {
   const r = await fetch(API_URL, {
     method: 'POST',
@@ -933,7 +939,7 @@ window.viewRoster = function(slotId) {
 
 window.removeMember = function(slotId, ts) {
   openConfirm('移除成員', '確定要把這位成員從名單移除嗎？', async () => {
-    const res = await apiPost({ action: 'removeMember', slotId, ts });
+    const res = await apiPost({ action: 'removeMember', slotId, ts, password: _adminPw });
     if (!applyData(res)) { toast('移除失敗', (res && res.error) || '', 'danger'); return; }
     refresh();
     viewRoster(slotId);
@@ -948,7 +954,7 @@ window.deleteSlot = function(slotId) {
     ? `此時段有 ${s.members.length} 位成員報名，確定要刪除嗎？此操作無法復原。`
     : '確定刪除這個時段嗎？';
   openConfirm('刪除時段', msg, async () => {
-    const res = await apiPost({ action: 'deleteSlot', slotId });
+    const res = await apiPost({ action: 'deleteSlot', slotId, password: _adminPw });
     if (!applyData(res)) { toast('刪除失敗', (res && res.error) || '', 'danger'); return; }
     refresh();
     toast('已刪除時段', '', 'warn');
@@ -965,7 +971,7 @@ $('addSlot').onclick = async () => {
   if (!d || !s || !e || !p) { toast('請完整填寫', '', 'warn'); return; }
   if (s >= e) { toast('結束時間需大於開始時間', '', 'warn'); return; }
 
-  const res = await apiPost({ action: 'addSlot', slot: { date: d, start: s, end: e, place: p, capacity: c } });
+  const res = await apiPost({ action: 'addSlot', slot: { date: d, start: s, end: e, place: p, capacity: c }, password: _adminPw });
   if (!applyData(res)) { toast('新增失敗', (res && res.error) || '', 'danger'); return; }
   $('nPlace').value = '';
   refresh();
@@ -1103,7 +1109,7 @@ function renderRecipients() {
   wrap.querySelectorAll('.rx').forEach(b => {
     b.onclick = async () => {
       const mail = getRecip()[parseInt(b.dataset.i, 10)];
-      const res = await apiPost({ action: 'removeRecipient', mail });
+      const res = await apiPost({ action: 'removeRecipient', mail, password: _adminPw });
       if (!applyData(res)) { toast('移除失敗', (res && res.error) || '', 'danger'); return; }
       renderRecipients();
       toast('已移除', '', 'warn');
@@ -1114,7 +1120,7 @@ $('addMail').onclick = async () => {
   const v = $('rMail').value.trim();
   if (!v || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) { toast('請輸入有效 Email', '', 'warn'); return; }
   if (getRecip().includes(v)) { toast('已存在此收件人', '', 'warn'); return; }
-  const res = await apiPost({ action: 'addRecipient', mail: v });
+  const res = await apiPost({ action: 'addRecipient', mail: v, password: _adminPw });
   if (!applyData(res)) { toast('新增失敗', (res && res.error) || '', 'danger'); return; }
   $('rMail').value = '';
   renderRecipients();

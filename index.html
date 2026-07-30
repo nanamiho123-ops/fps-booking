@@ -1536,7 +1536,7 @@ function renderSlots() {
   const hint = $('slotHint');
   wrap.innerHTML = '';
   const me = currentUser();
-  const mk = userKey(me);
+  const mineIds = mySlotIds();   // 我已報名的時段（來源＝後端 myBookings）
 
   // notice：未湊滿 4 人完整資料時提醒
   const notice = $('needPartyNotice');
@@ -1581,7 +1581,7 @@ function renderSlots() {
     const past = isPast(s.date, s.end);
     const cnt = s.members.length;
     const full = cnt >= s.capacity;
-    const joined = s.members.some(m => userKey(m) === mk);
+    const joined = mineIds.has(String(s.id));   // 改用後端回傳的「我的預約」時段清單
     const pct = Math.min(100, (cnt / s.capacity) * 100);
 
     const el = document.createElement('div');
@@ -1815,7 +1815,10 @@ $('ctaBtn').onclick = () => {
       }
     }
   }
-  const dup = targets.find(s => s.members.some(m => userKey(m) === userKey(me)));
+  // 重複報名檢查：改用後端回傳的「我的預約」時段清單（前台已無別人的個資）
+  // 後端 book_() 也會再驗一次，這裡只是提早給友善提示
+  const mineIds = mySlotIds();
+  const dup = targets.find(s => mineIds.has(String(s.id)));
   if (dup) {
     toast('已重複報名', `${dup.start}–${dup.end} 您已在名單中`, 'warn');
     return;
@@ -1880,6 +1883,7 @@ $('ctaBtn').onclick = () => {
       selectedSlots.clear();
       $('iConsent').checked = false;
       refreshConsentUI();
+      reloadMyBookings();   // 報名成功後向後端重查，「我的預約」才會立刻出現
       renderAll();
       toast('🎉 預約成功！', `已成功預約 ${targets.length} 個時段`, 'success');
     }
@@ -1887,21 +1891,15 @@ $('ctaBtn').onclick = () => {
 };
 
 function confirmLeave(slotId, wantGid) {
-  const slots = getSlots();
-  const s = slots.find(x => x.id === slotId);
-  if (!s) return;
-  const id = myIdentity();
-
-  // 找出該時段中的「我」：Email 或員編對得上即可；若指定了群組則限該組
-  const mine = s.members.find(m => isMe(m, id) && (wantGid ? String(m.groupId) === String(wantGid) : true));
-  if (!mine) {
-    toast('找不到您的報名紀錄', '', 'warn');
+  // 資料來源改為後端回傳的「我的預約」（前台已拿不到別人的個資）
+  const b = myBookings().find(x => String(x.slotId) === String(slotId)
+    && (wantGid ? String(x.groupId) === String(wantGid) : true));
+  if (!b) {
+    toast('找不到您的報名紀錄', '請重新查詢或重新整理頁面', 'warn');
     return;
   }
-  // (a) 只有代表人可以取消整組
-  if (!mine.primary) {
-    const leader = (s.members.find(m => m.primary && m.groupId === mine.groupId) || {}).name || '';
-    toast('只有代表人可以取消', leader ? '請聯絡代表人 ' + leader : '請聯絡該組代表人', 'warn');
+  if (!b.iAmPrimary) {
+    toast('只有代表人可以取消', b.leaderName ? '請聯絡代表人 ' + b.leaderName : '請聯絡該組代表人', 'warn');
     return;
   }
   // 第二道防線：查詢模式唯讀，且姓名+Email 都必須相符（避免誤刪他人預約）
@@ -1909,38 +1907,39 @@ function confirmLeave(slotId, wantGid) {
     toast('查詢僅供檢視', '如需取消，請在下方步驟 3 填入你的姓名與 Email', 'warn');
     return;
   }
-  if (!canCancel(mine)) {
+  if (!canCancel(b)) {
     toast('無法取消', '請確認姓名與 Email 與報名時填寫的完全一致', 'warn');
     return;
   }
-  const myPrimary = mine;
-  // 整組 4 人：優先用 groupId 比對，舊資料 fallback 用 leader 名稱
-  const gid = myPrimary.groupId;
-  const groupMembers = s.members.filter(m => {
-    if (gid && m.groupId) return m.groupId === gid;
-    if (m === myPrimary) return true;
-    if (!m.primary && m.leader === myPrimary.name) return true;
-    return false;
-  });
+
+  const me = currentUser();
+  const gid = b.groupId;
+  const names = b.groupNames || [];
+  const size = b.groupSize || names.length || 4;
 
   openModal({
     title: '取消預約',
-    sub: `將取消這個時段共 ${groupMembers.length} 位成員的預約，確定？`,
+    sub: `將取消這個時段共 ${size} 位成員的預約，確定？`,
     summary: `
-      <div class="row"><span class="l">日期</span><span class="v">${fmtDate(s.date)}</span></div>
-      <div class="row"><span class="l">時間</span><span class="v">${s.start} – ${s.end}</span></div>
-      <div class="row"><span class="l">地點</span><span class="v">${escapeHtml(s.place)}</span></div>
-      <div class="row"><span class="l">取消人數</span><span class="v">${groupMembers.length} 位</span></div>
+      <div class="row"><span class="l">日期</span><span class="v">${fmtDate(b.date)}</span></div>
+      <div class="row"><span class="l">時間</span><span class="v">${b.start} – ${b.end}</span></div>
+      <div class="row"><span class="l">地點</span><span class="v">${escapeHtml(b.place)}</span></div>
+      <div class="row"><span class="l">取消人數</span><span class="v">${size} 位</span></div>
     `,
     roster: `<div style="font-size:.75rem;color:var(--ink-soft);margin-bottom:.375rem;">將移除以下成員</div>` +
-      groupMembers.map((m,i) => `<div class="item">${i+1}. ${escapeHtml(m.name)}${m.primary ? '（您）' : '（同行）'}</div>`).join(''),
+      names.map((n, i) => `<div class="item">${i+1}. ${escapeHtml(n)}${n === (me.name || '').trim() ? '（您）' : '（同行）'}</div>`).join(''),
     okText: '確認取消',
     onOk: async () => {
       if (!gid) { toast('無法取消', '此筆缺少群組編號，請洽管理員', 'danger'); return; }
-      const d = await apiPost({ action: 'cancelGroup', slotId: s.id, groupId: gid });
-      if (!applyData(d)) { toast('取消失敗', (d && d.error) || '請稍後再試', 'danger'); renderAll(); return; }
+      // 附上姓名+Email：後端會驗證是否為該組代表人本人（前端擋不住直接呼叫 API）
+      const d = await apiPost({
+        action: 'cancelGroup', slotId: b.slotId, groupId: gid,
+        mail: (me.mail || '').trim(), name: (me.name || '').trim()
+      });
+      if (!applyData(d)) { toast('取消失敗', (d && d.error) || '請稍後再試', 'danger'); reloadMyBookings(); renderAll(); return; }
+      reloadMyBookings();
       renderAll();
-      toast('已取消預約', `${groupMembers.length} 位成員已從此時段移除`, 'warn');
+      toast('已取消預約', `${size} 位成員已從此時段移除`, 'warn');
     }
   });
 }
@@ -2036,6 +2035,7 @@ function renderAll() {
   renderPartyProgress();
   renderCTA();
   renderSummary();
+  ensureMyBookings();   // 身分有變才向後端重查「我的預約」（含 debounce）
   renderMine();
 }
 
@@ -2067,7 +2067,7 @@ function myIdentity() {
   const me = currentUser();
   return { mail: (me.mail || '').trim().toLowerCase(), empno: (me.empno || '').trim() };
 }
-// 只要 Email 或員編對得上就算同一人 —— 不再要求 4 人資料全填，也不限代表人
+// 只要 Email 或員編對得上就算同一人（僅在「舊後端仍回傳個資」時才用得到）
 function isMe(m, id) {
   const mail  = (m.mail  || '').trim().toLowerCase();
   const empno = String(m.empno || '').trim();
@@ -2075,32 +2075,91 @@ function isMe(m, id) {
   if (id.empno && empno && empno === id.empno) return true;
   return false;
 }
-// ── 取消資格（比「檢視」嚴格得多）─────────────────────────────────────────
-// 檢視：Email 或員編對得上就好（方便學生找到自己的預約）
-// 取消：必須是「表單填寫的身分」，且 Email 與姓名都與該筆紀錄相符。
-//       員編是 6 位數且識別證上就有，若允許只憑員編取消，等於任何人都能刪別人的預約。
-function canCancel(m) {
-  if (lookupIdentity) return false;            // 查詢模式一律唯讀
-  if (!m || !m.primary) return false;          // 只有代表人能取消整組
-  const me = currentUser();
-  if (!me.mail || !me.name) return false;
-  return (m.mail || '').trim().toLowerCase() === me.mail.trim().toLowerCase()
-      && (m.name || '').trim() === me.name.trim();
-}
 
-// 我出現在哪些時段，並附上「這筆我是不是代表人」與同組成員
-function myBookings() {
+// ── 我的預約：資料一律由後端比對 ─────────────────────────────────────────
+// 後端不再公開別人的 Email／員編，所以「哪幾筆是我的」改由 action=myBookings 判斷。
+// 若後端還是舊版（members 仍含個資），自動退回本機比對，前台不會壞。
+// 統一的資料格式：{ slotId, date, start, end, place, groupId, iAmPrimary, leaderName, groupNames[], groupSize }
+let _myBookings = [];     // 後端（或本機後援）算出的結果
+let _myKey      = null;   // 上次查詢用的身分，避免每次打字都重打 API
+let _myTimer    = null;
+let _myLoading  = false;
+
+function identityKey(id) { return (id.mail || '') + '|' + (id.empno || ''); }
+
+// 舊後端後援：直接用公開資料裡的個資比對（新後端沒有這些欄位，會自然回傳空陣列）
+function localMyBookings() {
   const id = myIdentity();
   if (!id.mail && !id.empno) return [];
   const out = [];
   getSlots().forEach(s => {
     const mine = s.members.find(m => isMe(m, id));
     if (!mine) return;
-    const gid = mine.groupId;
-    const group = s.members.filter(m => (gid && m.groupId) ? m.groupId === gid : m === mine);
-    out.push({ slot: s, mine: mine, gid: gid, group: group });
+    const gid = String(mine.groupId || '');
+    const group = s.members.filter(m => (gid && m.groupId) ? String(m.groupId) === gid : m === mine);
+    const lead = group.find(m => m.primary);
+    out.push({
+      slotId: s.id, date: s.date, start: s.start, end: s.end, place: s.place,
+      groupId: gid,
+      iAmPrimary: mine.primary === true,
+      leaderName: lead ? (lead.name || '') : '',
+      groupNames: group.map(m => m.name).filter(Boolean),
+      groupSize: group.length
+    });
   });
-  return out.sort((a, b) => (a.slot.date + a.slot.start).localeCompare(b.slot.date + b.slot.start));
+  return out.sort((a, b) => (a.date + a.start).localeCompare(b.date + b.start));
+}
+
+async function fetchMyBookings() {
+  const id = myIdentity();
+  if (!id.mail && !id.empno) { _myBookings = []; return; }
+  try {
+    const r = await apiPost({ action: 'myBookings', mail: id.mail, empno: id.empno });
+    if (r && r.ok && Array.isArray(r.bookings)) { _myBookings = r.bookings; return; }
+  } catch (e) { /* 連線問題 → 走後援 */ }
+  _myBookings = localMyBookings();   // 舊後端（unknown action）或連線失敗
+}
+
+// 身分有變才重新查詢（打字時 debounce，避免每個字都打一次 API）
+function ensureMyBookings() {
+  const k = identityKey(myIdentity());
+  if (k === _myKey) return;
+  _myKey = k;
+  if (!k.replace('|', '')) { _myBookings = []; renderMine(); return; }
+  clearTimeout(_myTimer);
+  _myLoading = true;
+  _myTimer = setTimeout(() => {
+    fetchMyBookings().then(() => { _myLoading = false; renderMine(); });
+  }, 350);
+}
+
+// 強制重查（報名/取消成功後呼叫）
+function reloadMyBookings() {
+  _myKey = null;
+  ensureMyBookings();
+}
+
+function myBookings() { return _myBookings; }
+
+// 我已經報名了哪些時段（用於時段卡標記與送出前的重複檢查）
+function mySlotIds() {
+  const set = new Set();
+  _myBookings.forEach(b => set.add(String(b.slotId)));
+  return set;
+}
+
+// ── 取消資格 ────────────────────────────────────────────────────────────
+// 檢視：Email 或員編對得上就好（方便學生找到自己的預約）
+// 取消：必須是「表單填寫的身分」+ 是代表人 + 姓名與 Email 都相符。
+//       員編是 6 位數且識別證上就有，若允許只憑員編取消，等於任何人都能刪別人的預約。
+//       後端也會再驗一次（action=cancelGroup），直接打 API 一樣擋得住。
+function canCancel(b) {
+  if (lookupIdentity) return false;              // 查詢模式一律唯讀
+  if (!b || !b.iAmPrimary) return false;         // 只有代表人能取消整組
+  const me = currentUser();
+  if (!me.mail || !me.name) return false;
+  // 後端比對姓名+Email；前台這裡先確認「表單填的代表人姓名」與該組代表人相同
+  return !b.leaderName || b.leaderName === me.name.trim();
 }
 
 // ────────── render: 我的預約 ──────────
@@ -2117,26 +2176,26 @@ function renderMine() {
     : '以下是你目前已成立的預約';
 
   body.innerHTML = list.map(b => {
-    const s = b.slot;
-    const past = isPast(s.date, s.end);
-    const leaderName = (b.group.find(m => m.primary) || {}).name || '';
-    const others = b.group.filter(m => m !== b.mine).map(m => m.name).filter(Boolean);
-    const roleTag = '<span class="mi-role">' + (b.mine.primary ? '代表人' : '同行成員') + '</span>';
+    const past = isPast(b.date, b.end);
+    const me = currentUser();
+    const myName = lookupIdentity ? '' : (me.name || '').trim();
+    const others = (b.groupNames || []).filter(n => n && n !== myName);
+    const roleTag = '<span class="mi-role">' + (b.iAmPrimary ? '代表人' : '同行成員') + '</span>';
 
     let right;
     if (past) {
       right = '<span class="mi-note">已過期</span>';
-    } else if (!b.mine.primary) {
+    } else if (!b.iAmPrimary) {
       // (a) 只有代表人能取消：4 人同進退，避免同行成員誤按解散全組
       right = '<span class="mi-note">僅代表人'
-            + (leaderName ? '（' + escapeHtml(leaderName) + '）' : '') + '可取消</span>';
+            + (b.leaderName ? '（' + escapeHtml(b.leaderName) + '）' : '') + '可取消</span>';
     } else if (lookupIdentity) {
       // 查詢模式唯讀：否則任何人打別人的員編就能取消別人的預約
       right = '<span class="mi-note">查詢僅供檢視<br>如需取消請在下方填寫資料</span>';
-    } else if (!canCancel(b.mine)) {
+    } else if (!canCancel(b)) {
       right = '<span class="mi-note">姓名與 Email 需與<br>報名時一致才能取消</span>';
-    } else if (b.gid) {
-      right = '<button class="mi-x danger" data-id="' + s.id + '" data-gid="' + b.gid + '">⚠️ 取消整組 4 人報名</button>';
+    } else if (b.groupId) {
+      right = '<button class="mi-x danger" data-id="' + b.slotId + '" data-gid="' + b.groupId + '">⚠️ 取消整組 4 人報名</button>';
     } else {
       right = '<span class="mi-note">此筆缺群組編號，請洽管理員</span>';
     }
@@ -2145,8 +2204,8 @@ function renderMine() {
       <div class="mine-item">
         <div class="mi-icon">📅</div>
         <div class="mi-body">
-          <div class="mi-date">${fmtDate(s.date)} ${s.start}–${s.end}${roleTag}</div>
-          <div class="mi-meta">📍 ${escapeHtml(s.place)} · 整組 ${b.group.length} 人</div>
+          <div class="mi-date">${fmtDate(b.date)} ${b.start}–${b.end}${roleTag}</div>
+          <div class="mi-meta">📍 ${escapeHtml(b.place)} · 整組 ${b.groupSize || 4} 人</div>
           ${others.length ? `<div class="mi-party">👥 同組：${others.map(escapeHtml).join('、')}</div>` : ''}
         </div>
         ${right}
@@ -2160,13 +2219,14 @@ function renderMine() {
 }
 
 // ────────── 查詢我的預約（換裝置／清快取也查得到）──────────
-function runLookup() {
+async function runLookup() {
   const raw = $('lookupInput').value.trim();
   const msg = $('lookupMsg');
   if (!raw) {
     lookupIdentity = null;
     msg.className = 'lookup-msg warn';
     msg.textContent = '請先輸入 Email 或 6 碼員編';
+    _myKey = null; _myBookings = [];
     renderMine();
     return;
   }
@@ -2174,9 +2234,16 @@ function runLookup() {
     ? { mail: raw.toLowerCase(), empno: '', label: raw }
     : { mail: '', empno: raw, label: raw };
 
-  const found = myBookings();
   $('lookupClear').hidden = false;
+  msg.className = 'lookup-msg';
+  msg.textContent = '查詢中…';
+
+  // 比對在後端進行（前台已拿不到別人的個資）
+  _myKey = identityKey(myIdentity());
+  await fetchMyBookings();
+  const found = myBookings();
   renderMine();
+
   if (found.length) {
     msg.className = 'lookup-msg ok';
     msg.textContent = '找到 ' + found.length + ' 筆，已顯示在上方「我的預約」';
@@ -2194,6 +2261,7 @@ function clearLookup() {
   $('lookupMsg').textContent = '';
   $('lookupMsg').className = 'lookup-msg';
   $('lookupClear').hidden = true;
+  reloadMyBookings();
   renderMine();
 }
 
